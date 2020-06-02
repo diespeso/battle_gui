@@ -24,7 +24,6 @@ pub fn from_str_to_point2f(pos: String) -> Point2<f32> {
 pub fn clean_empty(source: &mut Vec<(String, Vec<String>)>) {
 	for i in 0..source.len() {
 		let mut index = 0;
-		println!("{:#?}", source[i]);
 		if source[i].0 == "" {
 			index = i;
 		}
@@ -37,12 +36,12 @@ pub fn from_pixel_rect_to_frac(ctx: &mut Context, sprite: &Sprite, rect: &Rect)
 	let total_size = &sprite.dimensions(ctx);
 	let mut result = Rect::default();
 	
-	result.x = rect.x / total_size.x;
-	if result.x.is_nan() {
+	result.x = rect.x / total_size.w;
+	if result.x.is_nan() || result.x.is_infinite() {
 		result.x = 0.0;
 	}
-	result.y = rect.y / total_size.y;
-	if result.y.is_nan() {
+	result.y = rect.y / total_size.h;
+	if result.y.is_nan() || result.y.is_infinite() {
 		result.y = 0.0;
 	}
 	result.w = rect.w / total_size.w;

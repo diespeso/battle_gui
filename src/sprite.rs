@@ -4,7 +4,9 @@ use ggez::{Context, GameResult};
 use ggez::mint::Point2;
 use ggez::graphics::{self, Drawable, DrawParam, Image};
 use ggez::graphics::Rect;
+use super::utils;
 
+#[derive(Clone)]
 pub struct SpriteData {
 	pub drawable: Rc<RefCell<dyn Drawable>>,
 }
@@ -19,6 +21,7 @@ impl SpriteData {
 	}
 }
 
+#[derive(Clone)] //idk
 pub struct Sprite {
 	data: SpriteData,
 	param: DrawParam,
@@ -58,6 +61,10 @@ impl Sprite {
 	
 	pub fn set_draw_param(&mut self, param: DrawParam) {
 		self.param = param;
+	}
+	
+	pub fn move_by(&mut self, vector: Point2<f32>) {
+		self.param.dest = utils::add_point2f(self.param.dest, vector);
 	}
 	
 	pub fn draw(&self, ctx: &mut Context) -> GameResult {

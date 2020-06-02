@@ -25,7 +25,6 @@ impl Game {
 impl EventHandler for Game {
 	fn update(&mut self, ctx: &mut Context) -> GameResult<()> {
 		*(self.stat_card.as_ref().expect("no stat card").status.as_ref().expect("no stats in statcard").hp.borrow_mut()) += 1;
-		println!("{}", self.stat_card.as_ref().expect("").status.as_ref().expect("").hp.borrow());
 		Ok(())
 	}
 	

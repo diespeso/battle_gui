@@ -14,8 +14,8 @@ use std::path::Path;
 use std::rc::Rc;
 use std::cell::RefCell;
 
-use sprite::{Sprite, SpriteData};
-use gui::StatusCard;
+use sprite::{Sprite};
+use gui::{Status, StatusCard};
 use game::Game;
 
 //NOTE: RUN CARGO TEST, DUMBASS
@@ -26,11 +26,12 @@ fn main() {
     let (mut ctx, mut event_loop) = ContextBuilder::new("game", "diespeso").build().expect("contexto no iniciado");
     let mut game = Game::new(&mut ctx);
     let image = graphics::Image::new(&mut ctx, Path::new("/assets/battle_gui.png")).expect("No se puedo cargar imagen");
-    let image = Rc::new(RefCell::new(image));
-    let mut sprite_data = SpriteData::new(image.clone());
-    let mut sprite = Sprite::from_data(sprite_data);
-    let mut status_card = StatusCard::new(&mut ctx, sprite);
-    status_card.skin.move_by(Point2::<f32>::from_slice(&[100.0, 50.0]));
+    let mut sprite = Sprite::new(image.clone())
+    	.with_cut(&mut ctx, [0.0, 0.0, 64.0, 64.0]);
+    let mut status_card = StatusCard::new(&mut ctx, sprite)
+    	.with_status(Status::new("diespeso1", 100))
+    	.with_portrait(&mut ctx, Sprite::new(image.clone()));
+   
     game.set_status_card(status_card);
     
     match event::run(&mut ctx, &mut event_loop,&mut game) {

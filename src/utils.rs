@@ -1,7 +1,7 @@
 use ggez::mint::Point2;
 use ggez::Context;
 use std::vec::Vec;
-use ggez::graphics::{Rect, Image, Drawable};
+use ggez::graphics::{Rect, Drawable, Image};
 use super::sprite::Sprite;
 
 pub fn add_point2f(p1: Point2<f32>, p2: Point2<f32>) -> Point2::<f32> {
@@ -31,9 +31,9 @@ pub fn clean_empty(source: &mut Vec<(String, Vec<String>)>) {
 	}
 }
 
-pub fn from_pixel_rect_to_frac(ctx: &mut Context, sprite: &Sprite, rect: &Rect) 
+pub fn from_pixel_rect_to_frac(ctx: &mut Context, image: &Image, rect: &Rect) 
 	-> Rect {
-	let total_size = &sprite.dimensions(ctx);
+	let total_size = &image.dimensions();
 	let mut result = Rect::default();
 	
 	result.x = rect.x / total_size.w;
@@ -46,6 +46,6 @@ pub fn from_pixel_rect_to_frac(ctx: &mut Context, sprite: &Sprite, rect: &Rect)
 	}
 	result.w = rect.w / total_size.w;
 	result.h = rect.h / total_size.h;
-	
+	println!("{:#?}", rect);
 	result
 }

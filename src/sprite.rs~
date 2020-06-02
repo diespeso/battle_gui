@@ -1,83 +1,63 @@
-use std::rc::Rc;
-use std::cell::RefCell;
+use ggez::graphics::{Image, DrawParam, Drawable};
+use ggez::graphics::Rect;
 use ggez::{Context, GameResult};
 use ggez::mint::Point2;
-use ggez::graphics::{self, Drawable, DrawParam, Image};
-use ggez::graphics::Rect;
 use super::utils;
 
-pub struct SpriteData {
-	pub drawable: Rc<RefCell<dyn Drawable>>,
-}
-
-impl SpriteData {
-	pub fn new(drawable: Rc<RefCell<dyn Drawable>>) -> Self {
-		SpriteData{drawable: drawable}
-	}
-	
-	pub fn drawable(&self) -> Rc<RefCell<dyn Drawable>> {
-		self.drawable.clone()
-	}
-}
-
-#[derive(Clone)] //idk
+#[derive(Debug)]
 pub struct Sprite {
-	data: SpriteData,
-	param: DrawParam,
+	image: Image,
+	params: DrawParam,
 }
 
 impl Sprite {
-	pub fn new(data: SpriteData, param: DrawParam) -> Self {
-		Sprite {
-			data: data,
-			param: param,
+	pub fn new(image: Image) -> Self {
+		Self {
+			image,
+			params: Default::default(),
 		}
 	}
 	
-	pub fn drawable(&self) -> Rc<RefCell<dyn Drawable>> {
-		self.data.drawable()
+	pub fn with_cut<R>(mut self, ctx: &mut Context, rect: R) -> Self where R: Into<Rect> {
+		self.params.src = 
+			utils::from_pixel_rect_to_frac(
+				ctx, &self.image, &rect.into()
+			);
+		self
 	}
 	
-	pub fn from_data(data: SpriteData) -> Self {
-		Self::new(data, Default::default())
+	pub fn with_params(mut self, params: DrawParam) -> Self {
+		self.params = params;
+		self
+	}
+	
+	pub fn with_position<P>(mut self, pos: P) -> Self
+		where P: Into<Point2<f32>>{
+		self.params.dest = pos.into();
+		self
+	}
+	
+	pub fn set_params(&mut self, params: DrawParam) {
+		self.params = params;
 	}
 	
 	pub fn dimensions(&self, ctx: &mut Context) -> Rect {
-		self.drawable().borrow().dimensions(ctx).expect("drawable has no dimensions")
+		println!("{:#?}", self.s.src.clone());
+		self.params.src.clone()
 	}
 	
-	pub fn from_drawable(drawable: Rc<RefCell<dyn Drawable>>)
-		-> Self {
-		Self {
-			data: SpriteData::new(drawable),
-			param: Default::default(),
-		}
+	pub fn image(&self) -> &Image {
+		&self.image
 	}
 	
-	pub fn draw_param_mut(&mut self) -> &mut DrawParam {
-		&mut self.param
+	pub fn drawable(&self) -> impl Drawable {
+		self.image.clone()
 	}
 	
-	pub fn set_draw_param(&mut self, param: DrawParam) {
-		self.param = param;
-	}
-	
-	pub fn move_by(&mut self, vector: Point2<f32>) {
-		self.param.dest = utils::add_point2f(self.param.dest, vector);
-	}
 	
 	pub fn draw(&self, ctx: &mut Context) -> GameResult {
-		let data = self.data.drawable.borrow();
-		data.draw(ctx, self.param)
+		self.image.draw(ctx, self.params)
 	}
 	
-	pub fn pos_mut(&mut self) -> &mut Point2<f32> {
-		&mut self.param.dest
-	}
+	
 }
-	
-
-
-
-
-

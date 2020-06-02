@@ -3,7 +3,7 @@ use std::rc::Rc;
 
 use super::sprite::Sprite;
 use ggez::graphics::{self, DrawParam, Rect, BlendMode,
-	Text, TextFragment};
+	Text};
 use ggez::error::GameResult;
 use ggez::Context;
 
@@ -42,10 +42,8 @@ pub struct StatusCard {
 impl StatusCard {
 	pub fn new(ctx: &mut Context, skin: Sprite) -> Self {
 		let mut skin = skin;
-		let rect = from_pixel_rect_to_frac(ctx, &skin,
-		&Rect::new(0.0, 0.0, 160.0, 64.0));
-		skin.set_draw_param(DrawParam::default().src(
-			rect));
+		skin = skin.with_cut(ctx, [0.0, 0.0, 160.0, 64.0]);
+		println!("{:#?}", skin);
 		Self {
 			skin,
 			status: None,
@@ -65,17 +63,13 @@ impl StatusCard {
 	}
 	
 	pub fn with_portrait(mut self, ctx: &mut Context, mut sprite: Sprite) -> Self {
-		println!("{:#?}", &sprite.dimensions(ctx));
-		let rect = from_pixel_rect_to_frac(ctx, &sprite,
-		&Rect::new(320.0, 0.0, 64.0, 64.0));	
-		println!("{:#?}", rect.clone());		
-		sprite.set_draw_param(DrawParam::default()
-		.src(rect)
-		.dest(Point2::<f32>::from_slice(&[96.0, 0.0])));
+		sprite = sprite.with_cut(ctx, [320.0, 0.0, 64.0, 64.0])
+			.with_position([96.0, 0.0]);
 		self.portrait = Some(sprite);
 		
 		self
 	}
+	
 	
 	pub fn get_status(&self) -> Option<&Status> {
 		self.status.as_ref()
@@ -93,14 +87,6 @@ impl graphics::Drawable for StatusCard {
 				Point2::<f32>::from_slice(&[10.0, 8.0])
 			)
 		))?;
-		/*
-		self.hp_text.as_ref().expect("no status").draw(ctx,
-		param.dest(
-			add_point2f(
-				p.dest.clone(),
-				Point2::<f32>::from_slice(&[10.0, 40.0])
-			)
-		))*/
 		Text::new(self.status.as_ref().expect("no status").hp.borrow().to_string()).draw(ctx,
 		param.dest(
 			add_point2f(
@@ -123,7 +109,7 @@ impl graphics::Drawable for StatusCard {
 	}
 	
 	fn blend_mode(&self) -> Option<BlendMode> {
-		self.skin.drawable().borrow().blend_mode()
+		self.skin.drawable().blend_mode()
 	}
 }
 

@@ -1,4 +1,4 @@
-use ggez::{Context, ContextBuilder, GameResult};
+use ggez::{Context, GameResult};
 use ggez::event::{self, EventHandler};
 use ggez::graphics::{self, Drawable};
 

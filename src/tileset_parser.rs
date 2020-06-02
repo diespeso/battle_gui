@@ -15,14 +15,19 @@ use super::utils;
 
 static FILE_EXTENSION: &str = ".tc";
 
+pub struct Tile {
+
+}
+
+
 
 #[derive(Debug)]
-pub struct Tileset {
+pub struct TilesetConfiguration {
 	pub terrains: HashMap<String, TilesetData>,
 	pub objects: HashMap<String, TilesetData>,
 }
 
-impl Tileset {
+impl TilesetConfiguration {
 	pub fn new() -> Self {
 		Self {
 			terrains: HashMap::new(),
@@ -180,7 +185,7 @@ mod test {
 	//crash, but this line deletes that entry so its all good
 	let mut result: Vec<(String, Vec<String>)> = parse_result.drain().collect::<Vec<(String, Vec<String>)>>(); //converts a hashmap to a vector of pairs (my mind)
 
-	let mut tileset = Tileset::new();
+	let mut tileset = TilesetConfiguration::new();
 	for r in result {
 		tileset.add_from_data((r.0.clone(), TilesetData::from_data(r).1));
 	}

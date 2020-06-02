@@ -1,0 +1,9 @@
+set terrain black_sludge { 
+ position: 0 0 
+ size: 3 3 
+ }
+
+set object flower { 
+ position: 4 3 
+ size: 1 1 
+ }

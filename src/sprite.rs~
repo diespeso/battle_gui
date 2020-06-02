@@ -2,7 +2,8 @@ use std::rc::Rc;
 use std::cell::RefCell;
 use ggez::{Context, GameResult};
 use ggez::mint::Point2;
-use ggez::graphics::{self, Drawable, DrawParam};
+use ggez::graphics::{self, Drawable, DrawParam, Image};
+use ggez::graphics::Rect;
 
 pub struct SpriteData {
 	pub drawable: Rc<RefCell<dyn Drawable>>,
@@ -39,6 +40,10 @@ impl Sprite {
 		Self::new(data, Default::default())
 	}
 	
+	pub fn dimensions(&self, ctx: &mut Context) -> Rect {
+		self.drawable().borrow().dimensions(ctx).expect("drawable has no dimensions");
+	}
+	
 	pub fn from_drawable(drawable: Rc<RefCell<dyn Drawable>>)
 		-> Self {
 		Self {
@@ -47,9 +52,17 @@ impl Sprite {
 		}
 	}
 	
-	pub fn draw(&self, ctx: &mut Context) {
+	pub fn draw_param_mut(&mut self) -> &mut DrawParam {
+		&mut self.param
+	}
+	
+	pub fn set_draw_param(&mut self, param: DrawParam) {
+		self.param = param;
+	}
+	
+	pub fn draw(&self, ctx: &mut Context) -> GameResult {
 		let data = self.data.drawable.borrow();
-		data.draw();
+		data.draw(ctx, self.param)
 	}
 	
 	pub fn pos_mut(&mut self) -> &mut Point2<f32> {

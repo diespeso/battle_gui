@@ -43,7 +43,6 @@ impl StatusCard {
 	pub fn new(ctx: &mut Context, skin: Sprite) -> Self {
 		let mut skin = skin;
 		skin = skin.with_cut(ctx, [0.0, 0.0, 160.0, 64.0]);
-		println!("{:#?}", skin);
 		Self {
 			skin,
 			status: None,
@@ -110,45 +109,5 @@ impl graphics::Drawable for StatusCard {
 	
 	fn blend_mode(&self) -> Option<BlendMode> {
 		self.skin.drawable().blend_mode()
-	}
-}
-
-#[cfg(test)]
-mod tests {
-
-use std::rc::Rc;
-use std::cell::RefCell;
-use ggez::mint::Point2;
-
-use super::{Status, StatusCard};
-use super::super::{Sprite, SpriteData};
-use ggez::filesystem;
-use std::path::Path;
-use super::super::Game;
-use ggez::{Context, ContextBuilder, GameResult};
-use ggez::event::{self, EventHandler};
-use ggez::graphics::{self, Drawable};
-
-	#[test]
-	pub fn test_status() {
-		let (mut ctx, mut event_loop) = ContextBuilder::new("game", "diespeso").build().expect("contexto no iniciado");
-    let mut game = Game::new(&mut ctx);
-    let image = graphics::Image::new(&mut ctx, Path::new("/assets/battle_gui.png")).expect("No se puedo cargar imagen");
-    let image = Rc::new(RefCell::new(image));
-    let mut sprite_data = SpriteData::new(image.clone());
-    let mut sprite = Sprite::from_data(sprite_data);
-    let mut sp_2 = Sprite::from_data(SpriteData::new(image.clone()));
-    game.set_status_card(StatusCard::new(&mut ctx, sprite.clone())
-    	.with_status(Status::new("diespeso", 100))
-    	.with_portrait(&mut ctx, sp_2)
-    	);
-    
-    
-    let status = game.stat_card.as_ref().unwrap().get_status().unwrap();
-    
-    match event::run(&mut ctx, &mut event_loop,&mut game) {
-    	Ok(_) => println!("Clean exit"),
-    	Err(e) => println!("Error ocurred: {}", e)
-    }
 	}
 }

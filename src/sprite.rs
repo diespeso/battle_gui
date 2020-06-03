@@ -42,7 +42,6 @@ impl Sprite {
 	}
 	
 	pub fn dimensions(&self, ctx: &mut Context) -> Rect {
-		println!("{:#?}", self.params.src.clone());
 		self.params.src.clone()
 	}
 	

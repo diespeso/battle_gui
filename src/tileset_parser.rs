@@ -8,20 +8,92 @@ use std::io::BufReader;
 use std::path::Path;
 use std::convert::TryInto;
 use std::convert::From;
+use ggez::graphics::Image;
+use super::sprite::Sprite;
+use ggez::filesystem;
 
 use ggez::mint::Point2;
+use ggez::Context;
 
 use super::utils;
 
 static FILE_EXTENSION: &str = ".tc";
+static IMAGE_EXTENSION: &str = ".png";
+static SPRITE_SIZE: f32 = 32.0;
 
-pub struct Tile {
+pub struct Tilemap { //
 
 }
 
-
-
 #[derive(Debug)]
+pub struct Tileset { //set of 
+	pub configuration: TilesetConfiguration,
+	pub image: Image,
+	pub sprites: HashMap<String, Sprite>,
+}
+
+impl Tileset {
+	pub fn new(ctx: &mut Context, name: String) -> Result<Self, io::Error> {
+		let conf_file = format!("{}{}", name, FILE_EXTENSION);
+		let mut image_file = format!("/assets/{}{}", name, IMAGE_EXTENSION);
+		let image_file = Path::new(&image_file);
+		println!("{:#?} {:#?}", image_file, conf_file);
+		let mut parse_result = parse_file(Path::new(&conf_file))?.0;
+		parse_result.remove_entry(""); //weird bug
+		let mut result: Vec<(String, Vec<String>)> =
+			parse_result.drain().collect();
+			
+		let mut tileset_conf = TilesetConfiguration::new();
+		let image = Image::new(ctx, &image_file).expect("couldn't load image");
+		for r in result {
+			tileset_conf.add_from_data(
+				(r.0.clone(), TilesetData::from_data(r).1)
+			);
+		}
+		
+		println!("{}", "uwu");
+		Ok(
+		Self {
+			configuration: tileset_conf.clone(),
+			image: image.clone(),
+			sprites: Self::create_sprites(ctx, &image, &tileset_conf),
+		}
+		)
+	}
+	
+	fn create_sprites(ctx: &mut Context, image: &Image, conf: &TilesetConfiguration) -> HashMap<String, Sprite> {
+		let mut map = HashMap::new();
+		let mut sprite = Sprite::new(image.clone());
+		for (name, obj) in &conf.objects {
+			//sprite = sprite
+			sprite = Sprite::new(image.clone());
+			map.insert(name.to_string(), sprite.with_cut(ctx, [obj.position.x * SPRITE_SIZE,
+				obj.position.y * SPRITE_SIZE,
+				obj.size.x * SPRITE_SIZE,
+				obj.size.y * SPRITE_SIZE]));
+		}
+		
+		sprite = Sprite::new(image.clone());
+		for (name, terr) in &conf.terrains {
+			sprite = Sprite::new(image.clone());
+			map.insert(name.to_string(), sprite.with_cut(ctx, [terr.position.x * SPRITE_SIZE,
+				terr.position.y * SPRITE_SIZE,
+				terr.size.x * SPRITE_SIZE,
+				terr.size.y * SPRITE_SIZE]));
+		}
+		
+		map
+	}
+	
+	pub fn draw(&self, ctx: &mut Context) {
+		for sprite in self.sprites.values() {
+			sprite.draw(ctx);
+		}
+	}
+}
+
+
+#[derive(Debug, Clone)]
 pub struct TilesetConfiguration {
 	pub terrains: HashMap<String, TilesetData>,
 	pub objects: HashMap<String, TilesetData>,
@@ -190,6 +262,7 @@ mod test {
 		tileset.add_from_data((r.0.clone(), TilesetData::from_data(r).1));
 	}
 	println!("{:#?}", tileset);
+	
 	return Ok(());
 	}
 }

@@ -46,6 +46,5 @@ pub fn from_pixel_rect_to_frac(ctx: &mut Context, image: &Image, rect: &Rect)
 	}
 	result.w = rect.w / total_size.w;
 	result.h = rect.h / total_size.h;
-	println!("{:#?}", rect);
 	result
 }

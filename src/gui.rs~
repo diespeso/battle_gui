@@ -61,7 +61,8 @@ pub struct StatusCard {
 impl StatusCard {
 	pub fn new(ctx: &mut Context, skin: Sprite) -> Self {
 		let mut skin = skin;
-		skin = skin.with_cut(ctx, [0.0, 0.0, 160.0, 64.0]);
+		skin = skin.with_cut(ctx, [0.0, 0.0, 160.0, 192.0]);
+		//default skin dimensions
 		Self {
 			skin,
 			status: None,
@@ -120,7 +121,7 @@ impl StatusCard {
 	pub fn update(&mut self) {
 		/*let mut hp_texto = &self.hp_text.as_mut().expect("no status set").0;
 		hp_texto = &Text::new(self.get_status().hp.borrow().to_string());*/
-		self.hp_text.as_mut().expect("couldnt update gui").0 = Text::new(self.get_status().hp());
+		self.hp_text.as_mut().expect("couldnt update gui").0 = Text::new(self.get_status().hp().borrow().to_string());
 		println!("uwu");
 	}
 }

@@ -29,15 +29,19 @@ use tileset_parser::{*};
 fn main() {
     let (mut ctx, mut event_loop) = ContextBuilder::new("game", "diespeso").build().expect("contexto no iniciado");
     let mut game = Game::new(&mut ctx);
-    let path = Path::new("/assets/battle_gui.png");
-    let image = graphics::Image::new(&mut ctx, path).expect("No se puedo cargar imagen");
-    let mut sprite = Sprite::new(image.clone())
-    	.with_cut(&mut ctx, [0.0, 0.0, 64.0, 64.0]);
-    let mut status_card = StatusCard::new(&mut ctx, sprite)
+    let path_portrait = Path::new("/assets/the_fool_melon.png");
+    let path_skin = Path::new("/assets/skins.png");
+    let skin = graphics::Image::new(&mut ctx, path_skin)
+    	.expect("Couldnt load skin");
+    let portrait = graphics::Image::new(&mut ctx, path_portrait).expect("Couldn't load portrait");
+    let mut sprite_portrait = Sprite::new(portrait.clone())
+    	.with_cut(&mut ctx, [0.0, 0.0, 32.0, 32.0]);
+    let skin = Sprite::new(skin.clone());
+    let mut status_card = StatusCard::new(&mut ctx, skin)
     	.with_status(Status::new("diespeso1", 100))
     	.with_portrait(&mut ctx, Sprite::new(image.clone()));
-   println!("{:#?}", status_card);
-   status_card.move_by([320.0, 64.0].into());
+   //status_card.move_by([32.0, 536.0].into());
+   status_card.move_by([32.0, 376.0].into());
     game.set_status_card(status_card);
     
     let tileset = Tileset::new(&mut ctx, "the_fool".to_string())

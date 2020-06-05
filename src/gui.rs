@@ -61,7 +61,8 @@ pub struct StatusCard {
 impl StatusCard {
 	pub fn new(ctx: &mut Context, skin: Sprite) -> Self {
 		let mut skin = skin;
-		skin = skin.with_cut(ctx, [0.0, 0.0, 160.0, 64.0]);
+		skin = skin.with_cut(ctx, [0.0, 0.0, 160.0, 192.0]);
+		//default skin dimensions
 		Self {
 			skin,
 			status: None,
@@ -128,7 +129,6 @@ impl StatusCard {
 impl graphics::Drawable for StatusCard {
 	fn draw(&self, ctx: &mut Context, param: DrawParam) -> GameResult<()> {
 		//background
-		self.skin.draw(ctx)?;
 		let p = param.clone(); //ignore param for now
 		let ref_name = self.name_text.as_ref().expect("no status set");
 		ref_name.0.draw(ctx, ref_name.1.clone())?;
@@ -136,6 +136,7 @@ impl graphics::Drawable for StatusCard {
 		ref_hp.0.draw(ctx, ref_hp.1.clone())?;
 		self.portrait.as_ref().expect("no portrait set")
 			.draw(ctx);
+		self.skin.draw(ctx)?;
 		/*self.name_text.as_ref().expect("no status").draw(ctx, param.dest(
 			add_point2f(
 				p.dest.clone(),

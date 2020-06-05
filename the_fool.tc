@@ -1,0 +1,14 @@
+ set object hope { 
+ position: 0 0 
+ size: 3 2 
+ }
+ 
+ set object honesty { 
+ position: 7 0 
+ size: 5 3 
+ }
+ 
+ set object integrity { 
+ position: 20 0 
+ size: 5 5 
+ }

@@ -1,0 +1,134 @@
+Sin
+A weird feral biological creature with white flesh.
+
+They are named after nouns.
+
+Every sin has a specific coloration that serves as a hint
+to know the Arcana from which it derives.
+
+Sins have no genre.
+
+Original sin
+The white meat / biological matter that constructs all sins.
+
+Some sins will drop original sins that contain special abilities.
+
+Original sins can be fused to yield better abilities, or to boost
+the power of a given ability.
+
+Matter.
+Drops from death sins. Every arcana has its matter:
+	Fool's matter -> Basic attack matter
+		Color: plain white and black
+		weapon: swords.
+		strong: None.
+		weak: None.
+		Null: None.
+	Devil's matter -> Fire and status ailment matter
+		Color: white and red.
+		weapons: guns (ranged)
+		strong: Emperor
+		weak: Hermit
+		Null: None
+	Lovers' matter -> "White magic" and bow buff kinda matter
+		Color: white and pink.
+		weapons: bows and ranged.
+		strong: Hermit
+		weak: Emperor
+		Null: None
+	World's matter -> "Electric" kinda matter
+		Color: white and orange
+		weapons: Cannons
+	Emperor's matter -> defensive and sword buff kinda matter
+		Color: white and green
+		weapons: hammers
+		Strong: Lovers
+		weak: Devil
+		Null: None
+	Hermit's matter -> "Water" kinda matter
+		Color: white and blue
+		weapons: wands
+		
+	Death's matter -> "Really dark and powerful" kinda matter
+		Color: white and many black parts, mostly mechanical
+		weapons: ???
+		
+	Fusion Arcanas:
+		Death + Lovers: Dark Priestess
+			weapons: Unholy Bows
+		Hermit + The World: The Sun
+			weapons: Light cannons
+		The Devil + The Emperor: Unholy Knight
+			weapons: Auto Axe
+		Death + The Devil: The Deathbringer
+			weapons: Ruination set
+		The Fool + The World: Salvation
+			weapons: bio swords
+	
+
+The Fool.
+Arcana represented by the protagonist in an implicit form.
+(it is not officialy stated that the protagonist is the 
+source of the sins from this Arcana).
+
+Mainly physical attacks, some buffs and debuffs.
+
+Abilities:
+	Enrage: Attack up
+	Solidify: Defense up
+	Sublimate: Speed up
+	Decompose: Evasion up
+	
+	
+The Devil
+
+Abilities:
+	Combustion: Fire power up
+	Flame: low fire damage
+	Scorch: medium fire damage
+	Flare: High fire damage
+	Pepper: Poison status
+	Hell's gates: Medium fire damage for all.
+	Dark Light: Confusion for all 
+	Pact: Revives an ally.
+	Cauterise: Medium hp recovery for one.
+	Pausterization: Scorch + water = high bio damage???
+	Melt: Defense down.
+
+Lovers
+
+Abilities:
+	Blessing: Low hp recovery
+	Prayer: Medium hp recovery
+	Promise of love: Hihg hp recovery
+	Encantation: Low hp recovery for all
+	Chorale: Medium hp recovery for all
+	Operetta: High hp recovery for all
+	Calibrate: Improves bow damage and crit chance
+	Vote: Revives an ally.
+	Up: wakes up an ally.
+	Vote of might: Attack up
+	Vote of endurance: Defense up
+	
+	Cleanse shot: Holy damage + The Devil
+	
+	Passive:
+		Slingshot: 1.5 * damage of objects
+	
+The World
+
+Abilities
+	Fix: Medium hp recovery for one.
+	Battery: Low electric damage to one.
+	Shock: Medium electric damage to one.
+	
+	Blackout: Hihg electric damage to all.
+	Diferentiation: Stun to one.
+	Integration: Speed up to one.
+	Charge: leeches hp from one.
+	White noise: Confusion to all.
+	Plasma infusion: Electrify weapon of one (no guns)
+	Clockwise: Speed up
+	Counterclockwise: Speed down
+	
+

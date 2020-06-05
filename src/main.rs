@@ -3,6 +3,7 @@ mod sprite;
 mod gui;
 mod tileset_parser;
 mod game;
+mod movable;
 
 use ggez::mint::Point2;
 use ggez::{Context, GameResult, ContextBuilder};
@@ -17,6 +18,7 @@ use std::cell::RefCell;
 use sprite::{Sprite};
 use gui::{Status, StatusCard};
 use game::Game;
+use movable::Movable;
 
 use tileset_parser::{*};
 
@@ -34,13 +36,14 @@ fn main() {
     let mut status_card = StatusCard::new(&mut ctx, sprite)
     	.with_status(Status::new("diespeso1", 100))
     	.with_portrait(&mut ctx, Sprite::new(image.clone()));
-   
+   println!("{:#?}", status_card);
+   status_card.move_by([320.0, 320.0].into());
     game.set_status_card(status_card);
     
-    let tileset = Tileset::new(&mut ctx, "uno".to_string());
-    println!("{:#?}", tileset);
-    
-    game.set_tileset(tileset.expect("no tileset made"));
+    let tileset = Tileset::new(&mut ctx, "the_fool".to_string())
+   		.expect("coulndt build tileset");
+    game.sprites.push(tileset.sprites["integrity"].clone());
+    game.set_tileset(tileset);
     
     match event::run(&mut ctx, &mut event_loop,&mut game) {
     	Ok(_) => println!("Clean exit"),

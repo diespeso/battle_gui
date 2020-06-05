@@ -11,6 +11,13 @@ pub fn add_point2f(p1: Point2<f32>, p2: Point2<f32>) -> Point2::<f32> {
 	}
 }
 
+pub fn sub_point2f(p1: Point2<f32>, p2: Point2<f32>) -> Point2::<f32> {
+	Point2::<f32> {
+		x: p1.x - p2.x,
+		y: p1.y - p2.y,
+	}
+}
+
 pub fn from_str_to_point2f(pos: String) -> Point2<f32> {
 	let mut result: Vec<String> = pos.split(' ').map(|x| x.to_string()).collect();
 	let mut result: Point2<f32> = Point2::<f32>::from_slice(

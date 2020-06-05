@@ -39,6 +39,7 @@ impl Tileset {
 		let image_file = Path::new(&image_file);
 		println!("{:#?} {:#?}", image_file, conf_file);
 		let mut parse_result = parse_file(Path::new(&conf_file))?.0;
+
 		parse_result.remove_entry(""); //weird bug
 		let mut result: Vec<(String, Vec<String>)> =
 			parse_result.drain().collect();
@@ -51,7 +52,6 @@ impl Tileset {
 			);
 		}
 		
-		println!("{}", "uwu");
 		Ok(
 		Self {
 			configuration: tileset_conf.clone(),
@@ -201,6 +201,7 @@ fn parse_file(path: &Path) -> Result<(HashMap<String, Vec<String>>, i32), io::Er
 	let mut f = File::open(path)?;
 	let mut buf_reader = BufReader::new(f);
 	let mut content = String::new();
+	
 	buf_reader.read_to_string(&mut content)?;
 	let content_sets: Vec<&str> = content.split("set").collect(); // count sets
 	let n = content_sets.len() - 1;
@@ -261,7 +262,6 @@ mod test {
 	for r in result {
 		tileset.add_from_data((r.0.clone(), TilesetData::from_data(r).1));
 	}
-	println!("{:#?}", tileset);
 	
 	return Ok(());
 	}

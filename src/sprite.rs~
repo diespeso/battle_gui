@@ -2,9 +2,11 @@ use ggez::graphics::{Image, DrawParam, Drawable};
 use ggez::graphics::Rect;
 use ggez::{Context, GameResult};
 use ggez::mint::Point2;
-use super::utils;
 
-#[derive(Debug)]
+use super::utils;
+use super::movable::Movable;
+
+#[derive(Debug, Clone)]
 pub struct Sprite {
 	image: Image,
 	params: DrawParam,
@@ -42,7 +44,6 @@ impl Sprite {
 	}
 	
 	pub fn dimensions(&self, ctx: &mut Context) -> Rect {
-		println!("{:#?}", self.params.src.clone());
 		self.params.src.clone()
 	}
 	
@@ -58,6 +59,18 @@ impl Sprite {
 	pub fn draw(&self, ctx: &mut Context) -> GameResult {
 		self.image.draw(ctx, self.params)
 	}
+}
+
+impl Movable for Sprite {
+	fn move_by(&mut self, vector: Point2<f32>) {
+		self.params.dest = utils::add_point2f(
+		self.params.dest.clone(), vector);
+	}
 	
-	
+	fn move_to(position: Point2<f32>) -> Point2<f32> {
+		let mut r = utils::sub_point2f(position.clone(),
+			self.params.dest.clone());
+		self.params.dest = position;
+		r
+	}
 }

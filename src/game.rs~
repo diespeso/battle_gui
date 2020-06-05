@@ -4,11 +4,13 @@ use ggez::graphics::{self, Drawable};
 
 use super::gui::{Status, StatusCard};
 use super::tileset_parser::Tileset;
+use super::sprite::Sprite;
 
 
 pub struct Game {
 	pub stat_card: Option<StatusCard>,
-	pub tileset: Option<Tileset>
+	pub tileset: Option<Tileset>,
+	pub sprites: Vec<Sprite>,
 }
 
 impl Game {
@@ -16,6 +18,8 @@ impl Game {
 	pub fn new(ctx: &mut Context) -> Self {
 		Self {
 			stat_card: None,
+			tileset: None,
+			sprites: Vec::new(),
 		}
 	}
 	
@@ -30,7 +34,13 @@ impl Game {
 
 impl EventHandler for Game {
 	fn update(&mut self, ctx: &mut Context) -> GameResult<()> {
-		*(self.stat_card.as_ref().expect("no stat card").status.as_ref().expect("no stats in statcard").hp.borrow_mut()) += 1;
+		let mut card = self.stat_card.as_mut()
+			.expect("no status card");
+		/* *(self.stat_card.as_ref().expect("no stat card").status.as_ref().expect("no stats in statcard").hp.borrow_mut()) += 1;
+		self.stat_card.expect("no stats card)*/
+		//card.status.as_mut().expect("no status at all")
+		*card.get_status_mut().hp.borrow_mut() += 1;
+		println!("{:#?}", *card.get_status_mut().hp);
 		Ok(())
 	}
 	
@@ -40,6 +50,10 @@ impl EventHandler for Game {
 			tileset.draw(ctx);
 		}
 		self.stat_card.as_ref().expect("status card not initialized").draw(ctx, Default::default());
+		
+		for sprite in &self.sprites {
+			sprite.draw(ctx);
+		}
 		graphics::present(ctx)
 	}
 }

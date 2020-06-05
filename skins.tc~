@@ -1,0 +1,9 @@
+ set object plain_skin { 
+ position: 0 0 
+ size: 5 6 
+ }
+ 
+ set object shadowed_skin { 
+ position: 10 0 
+ size: 5 6 
+ }

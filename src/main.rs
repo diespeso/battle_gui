@@ -51,17 +51,95 @@ fn main() {
     status_card.set_portrait(&mut ctx, sprite_portrait);
    //status_card.move_by([32.0, 536.0].into());
    status_card.move_by([32.0, 376.0].into());
-    game.set_status_card(status_card);
+   let mut status_card = Rc::new(RefCell::new(status_card));
+   
+    game.set_status_card(status_card.clone());
     
     let tileset = Tileset::new(&mut ctx, "the_fool".to_string())
    		.expect("coulndt build tileset");
     game.sprites.push(tileset.sprites["integrity"].clone());
     game.set_tileset(tileset);
     
-    let animatable = skin.clone();
+    let animatable = status_card.clone();
     
     let mut animation = LinearAnimation::new(animatable.clone());
     animation.add_command(
+    	Box::new(MoveCommand::new([1.0, 1.0].into()))
+    );
+    animation.add_command(
+    	Box::new(MoveCommand::new([1.0, 1.0].into()))
+    );animation.add_command(
+    	Box::new(MoveCommand::new([1.0, 1.0].into()))
+    );animation.add_command(
+    	Box::new(MoveCommand::new([1.0, 1.0].into()))
+    );animation.add_command(
+    	Box::new(MoveCommand::new([1.0, 1.0].into()))
+    );animation.add_command(
+    	Box::new(MoveCommand::new([1.0, 1.0].into()))
+    );animation.add_command(
+    	Box::new(MoveCommand::new([1.0, 1.0].into()))
+    );animation.add_command(
+    	Box::new(MoveCommand::new([1.0, 1.0].into()))
+    );animation.add_command(
+    	Box::new(MoveCommand::new([1.0, 1.0].into()))
+    );animation.add_command(
+    	Box::new(MoveCommand::new([1.0, 1.0].into()))
+    );
+    animation.add_command(
+    	Box::new(MoveCommand::new([1.0, 1.0].into()))
+    );animation.add_command(
+    	Box::new(MoveCommand::new([1.0, 1.0].into()))
+    );animation.add_command(
+    	Box::new(MoveCommand::new([1.0, 1.0].into()))
+    );animation.add_command(
+    	Box::new(MoveCommand::new([1.0, 1.0].into()))
+    );animation.add_command(
+    	Box::new(MoveCommand::new([1.0, 1.0].into()))
+    );animation.add_command(
+    	Box::new(MoveCommand::new([1.0, 1.0].into()))
+    );animation.add_command(
+    	Box::new(MoveCommand::new([1.0, 1.0].into()))
+    );animation.add_command(
+    	Box::new(MoveCommand::new([1.0, 1.0].into()))
+    );animation.add_command(
+    	Box::new(MoveCommand::new([1.0, 1.0].into()))
+    );
+    animation.add_command(
+    	Box::new(MoveCommand::new([1.0, 1.0].into()))
+    );animation.add_command(
+    	Box::new(MoveCommand::new([1.0, 1.0].into()))
+    );animation.add_command(
+    	Box::new(MoveCommand::new([1.0, 1.0].into()))
+    );animation.add_command(
+    	Box::new(MoveCommand::new([1.0, 1.0].into()))
+    );animation.add_command(
+    	Box::new(MoveCommand::new([1.0, 1.0].into()))
+    );animation.add_command(
+    	Box::new(MoveCommand::new([1.0, 1.0].into()))
+    );animation.add_command(
+    	Box::new(MoveCommand::new([1.0, 1.0].into()))
+    );animation.add_command(
+    	Box::new(MoveCommand::new([1.0, 1.0].into()))
+    );animation.add_command(
+    	Box::new(MoveCommand::new([1.0, 1.0].into()))
+    );
+    animation.add_command(
+    	Box::new(MoveCommand::new([1.0, 1.0].into()))
+    );animation.add_command(
+    	Box::new(MoveCommand::new([1.0, 1.0].into()))
+    );animation.add_command(
+    	Box::new(MoveCommand::new([1.0, 1.0].into()))
+    );animation.add_command(
+    	Box::new(MoveCommand::new([1.0, 1.0].into()))
+    );animation.add_command(
+    	Box::new(MoveCommand::new([1.0, 1.0].into()))
+    );animation.add_command(
+    	Box::new(MoveCommand::new([1.0, 1.0].into()))
+    );animation.add_command(
+    	Box::new(MoveCommand::new([1.0, 1.0].into()))
+    );animation.add_command(
+    	Box::new(MoveCommand::new([1.0, 1.0].into()))
+    );animation.add_command(
     	Box::new(MoveCommand::new([1.0, 1.0].into()))
     );
     

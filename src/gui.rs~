@@ -9,6 +9,7 @@ use ggez::Context;
 
 use super::utils::{from_pixel_rect_to_frac, add_point2f};
 use super::movable::Movable;
+use super::animation::Animatable;
 
 use ggez::mint::Point2;
 
@@ -93,7 +94,6 @@ impl StatusCard {
 	}
 	
 	pub fn set_portrait(&mut self, ctx: &mut Context, mut sprite: Sprite){
-		let mut sprite = sprite;
 		sprite.set_cut(ctx, [320.0, 0.0, 64.0, 64.0]);
 		sprite.set_position([96.0, 0.0]);
 		self.portrait = Some(sprite);

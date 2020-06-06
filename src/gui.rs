@@ -9,6 +9,7 @@ use ggez::Context;
 
 use super::utils::{from_pixel_rect_to_frac, add_point2f};
 use super::movable::Movable;
+use super::animation::Animatable;
 
 use ggez::mint::Point2;
 
@@ -182,4 +183,8 @@ impl Movable for StatusCard {
 	Point2<f32> {
 		unimplemented!();
 	}
+}
+
+impl Animatable for StatusCard {
+
 }

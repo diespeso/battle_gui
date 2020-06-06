@@ -1,5 +1,8 @@
 use core::time::Duration;
 
+use std::rc::Rc;
+use std::cell::RefCell;
+
 use ggez::{Context, GameResult};
 use ggez::event::{self, EventHandler};
 use ggez::graphics::{self, Drawable};
@@ -10,7 +13,7 @@ use super::sprite::Sprite;
 
 
 pub struct Game {
-	pub stat_card: Option<StatusCard>,
+	pub stat_card: Option<Rc<RefCell<StatusCard>>>,
 	pub tileset: Option<Tileset>,
 	pub sprites: Vec<Sprite>,
 }
@@ -25,7 +28,7 @@ impl Game {
 		}
 	}
 	
-	pub fn set_status_card(&mut self, stat_card: StatusCard) {
+	pub fn set_status_card(&mut self, stat_card: Rc<RefCell<StatusCard>>) {
 		self.stat_card = Some(stat_card);
 	}
 	
@@ -37,7 +40,7 @@ impl Game {
 impl EventHandler for Game {
 	fn update(&mut self, ctx: &mut Context) -> GameResult<()> {
 		let mut card = self.stat_card.as_mut()
-			.expect("no status card");
+			.expect("no status card").borrow_mut();
 		/* *(self.stat_card.as_ref().expect("no stat card").status.as_ref().expect("no stats in statcard").hp.borrow_mut()) += 1;
 		self.stat_card.expect("no stats card)*/
 		//card.status.as_mut().expect("no status at all")
@@ -52,7 +55,9 @@ impl EventHandler for Game {
 		if let Some(tileset) = &self.tileset {
 			tileset.draw(ctx);
 		}
-		self.stat_card.as_ref().expect("status card not initialized").draw(ctx, Default::default());
+		/*self.stat_card.as_ref().expect("status card not initialized").draw(ctx, Default::default());*/
+		self.stat_card.as_ref().expect("no status card set")
+			.borrow().draw(ctx, Default::default());
 		
 		for sprite in &self.sprites {
 			sprite.draw(ctx);

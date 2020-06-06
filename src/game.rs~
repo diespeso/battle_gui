@@ -1,5 +1,8 @@
 use core::time::Duration;
 
+use std::rc::Rc;
+use std::cell::RefCell;
+
 use ggez::{Context, GameResult};
 use ggez::event::{self, EventHandler};
 use ggez::graphics::{self, Drawable};
@@ -7,11 +10,10 @@ use ggez::graphics::{self, Drawable};
 use super::gui::{Status, StatusCard};
 use super::tileset_parser::Tileset;
 use super::sprite::Sprite;
-use super::animation::AnimationEngine;
 
 
 pub struct Game {
-	pub stat_card: Option<StatusCard>,
+	pub stat_card: Option<Rc<RefCell<StatusCard>>>,
 	pub tileset: Option<Tileset>,
 	pub sprites: Vec<Sprite>,
 }
@@ -26,7 +28,7 @@ impl Game {
 		}
 	}
 	
-	pub fn set_status_card(&mut self, stat_card: StatusCard) {
+	pub fn set_status_card(&mut self, stat_card: Rc<RefCell<StatusCard>>) {
 		self.stat_card = Some(stat_card);
 	}
 	
@@ -53,7 +55,9 @@ impl EventHandler for Game {
 		if let Some(tileset) = &self.tileset {
 			tileset.draw(ctx);
 		}
-		self.stat_card.as_ref().expect("status card not initialized").draw(ctx, Default::default());
+		/*self.stat_card.as_ref().expect("status card not initialized").draw(ctx, Default::default());*/
+		self.stat_card.as_ref().expect("no status card set")
+			.borrow().draw(ctx, Default::default());
 		
 		for sprite in &self.sprites {
 			sprite.draw(ctx);

@@ -22,12 +22,11 @@ impl Sprite {
 		}
 	}
 	
-	pub fn with_cut<R>(mut self, ctx: &mut Context, rect: R) -> Self where R: Into<Rect> {
+	pub fn set_cut<R>(&mut self, ctx: &mut Context, rect: R) where R: Into<Rect> {
 		self.params.src = 
 			utils::from_pixel_rect_to_frac(
 				ctx, &self.image, &rect.into()
 			);
-		self
 	}
 	
 	pub fn with_params(mut self, params: DrawParam) -> Self {
@@ -35,10 +34,9 @@ impl Sprite {
 		self
 	}
 	
-	pub fn with_position<P>(mut self, pos: P) -> Self
+	pub fn set_position<P>(mut self, pos: P)
 		where P: Into<Point2<f32>>{
 		self.params.dest = pos.into();
-		self
 	}
 	
 	pub fn set_params(&mut self, params: DrawParam) {
@@ -78,5 +76,5 @@ impl Movable for Sprite {
 }
 
 impl Animatable for Sprite {
-
+	//dummy
 }

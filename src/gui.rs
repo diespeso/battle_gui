@@ -51,7 +51,7 @@ impl Status {
 
 #[derive(Debug)]
 pub struct StatusCard {
-	pub skin: Sprite,
+	pub skin: Rc<RefCell<Sprite>>,
 	pub status: Option<Status>,
 	pub name_text: Option<MovableText>,
 	pub hp_text: Option<MovableText>,
@@ -59,12 +59,11 @@ pub struct StatusCard {
 }
 
 impl StatusCard {
-	pub fn new(ctx: &mut Context, skin: Sprite) -> Self {
-		let mut skin = skin;
-		skin = skin.with_cut(ctx, [0.0, 0.0, 160.0, 192.0]);
+	pub fn new(ctx: &mut Context, skin: Rc<RefCell<Sprite>>) -> Self {
+		skin.clone().borrow_mut().set_cut(ctx, [0.0, 0.0, 160.0, 192.0]);
 		//default skin dimensions
 		Self {
-			skin,
+			skin: skin.clone(),
 			status: None,
 			name_text: None,
 			hp_text: None,
@@ -72,7 +71,7 @@ impl StatusCard {
 		}
 	}
 	
-	pub fn with_status(mut self, status: Status) -> Self {
+	pub fn set_status(&mut self, status: Status) {
 		self.status = Some(status);
 		/*self.name_text = Some(Text::new(self.status.as_ref().unwrap().name));
 		
@@ -91,14 +90,12 @@ impl StatusCard {
 		//self.hp_text.1 = self.hp_text.1.dest([10.0, 40.0]);
 		//first get the status as reference, unwrap it, its ok
 		//then take the hp rc and borrow it, convert to string
-		self
 	}
 	
-	pub fn with_portrait(mut self, ctx: &mut Context, mut sprite: Sprite) -> Self {
-		sprite = sprite.with_cut(ctx, [320.0, 0.0, 64.0, 64.0])
-			.with_position([96.0, 0.0]);
+	pub fn set_portrait(&mut self, ctx: &mut Context, mut sprite: Sprite){
+		sprite.set_cut(ctx, [320.0, 0.0, 64.0, 64.0]);
+		sprite.set_position([96.0, 0.0]);
 		self.portrait = Some(sprite);
-		self
 	}
 	
 	
@@ -136,7 +133,7 @@ impl graphics::Drawable for StatusCard {
 		ref_hp.0.draw(ctx, ref_hp.1.clone())?;
 		self.portrait.as_ref().expect("no portrait set")
 			.draw(ctx);
-		self.skin.draw(ctx)?;
+		self.skin.borrow().draw(ctx)?;
 		/*self.name_text.as_ref().expect("no status").draw(ctx, param.dest(
 			add_point2f(
 				p.dest.clone(),
@@ -164,13 +161,13 @@ impl graphics::Drawable for StatusCard {
 	}
 	
 	fn blend_mode(&self) -> Option<BlendMode> {
-		self.skin.drawable().blend_mode()
+		self.skin.borrow().drawable().blend_mode()
 	}
 }
 
 impl Movable for StatusCard {
 	fn move_by(&mut self, vector: Point2<f32>) {
-		self.skin.move_by(vector.clone());
+		self.skin.borrow_mut().move_by(vector.clone());
 		let mut name = self.name_text.as_mut().expect("no status");
 		name.1 = name.1.dest(add_point2f(name.1.dest.clone(), 
 			vector.clone()));

@@ -16,7 +16,7 @@ use std::path::Path;
 use std::rc::Rc;
 use std::cell::RefCell;
 use std::borrow::Borrow;
-use core::time::Duration
+use core::time::Duration;
 
 use sprite::{Sprite};
 use gui::{Status, StatusCard};
@@ -40,13 +40,15 @@ fn main() {
     	.expect("Couldnt load skin");
    // let skin = Rc::new(RefCell::new(skin));
    let skin = Sprite::new(skin);
+   let skin = Rc::new(RefCell::new(skin));
     let portrait = graphics::Image::new(&mut ctx, path_portrait).expect("Couldn't load portrait");
-    let mut sprite_portrait = Sprite::new(portrait.clone())
-    	.with_cut(&mut ctx, [0.0, 0.0, 32.0, 32.0]);
+    let mut sprite_portrait = Sprite::new(portrait.clone());
     
-    let mut status_card = StatusCard::new(&mut ctx, skin.clone())
-    	.with_status(Status::new("diespeso1", 100))
-    	.with_portrait(&mut ctx, sprite_portrait);
+    	sprite_portrait.set_cut(&mut ctx, [0.0, 0.0, 32.0, 32.0]);
+    
+    let mut status_card = StatusCard::new(&mut ctx, skin.clone());
+    status_card.set_status(Status::new("diespeso1", 100));
+    status_card.set_portrait(&mut ctx, &mut sprite_portrait);
    //status_card.move_by([32.0, 536.0].into());
    status_card.move_by([32.0, 376.0].into());
     game.set_status_card(status_card);
@@ -56,7 +58,7 @@ fn main() {
     game.sprites.push(tileset.sprites["integrity"].clone());
     game.set_tileset(tileset);
     
-    let animatable = Rc::new(RefCell::new(skin.clone()));
+    let animatable = skin.clone();
     
     let mut animation = LinearAnimation::new(animatable.clone());
     animation.add_command(

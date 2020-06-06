@@ -67,19 +67,21 @@ impl Tileset {
 		for (name, obj) in &conf.objects {
 			//sprite = sprite
 			sprite = Sprite::new(image.clone());
-			map.insert(name.to_string(), sprite.with_cut(ctx, [obj.position.x * SPRITE_SIZE,
+			sprite.set_cut(ctx, [obj.position.x * SPRITE_SIZE,
 				obj.position.y * SPRITE_SIZE,
 				obj.size.x * SPRITE_SIZE,
-				obj.size.y * SPRITE_SIZE]));
+				obj.size.y * SPRITE_SIZE]);
+			map.insert(name.to_string(), sprite);
 		}
 		
 		sprite = Sprite::new(image.clone());
 		for (name, terr) in &conf.terrains {
 			sprite = Sprite::new(image.clone());
-			map.insert(name.to_string(), sprite.with_cut(ctx, [terr.position.x * SPRITE_SIZE,
+			sprite.set_cut(ctx, [terr.position.x * SPRITE_SIZE,
 				terr.position.y * SPRITE_SIZE,
 				terr.size.x * SPRITE_SIZE,
-				terr.size.y * SPRITE_SIZE]));
+				terr.size.y * SPRITE_SIZE]);
+			map.insert(name.to_string(), sprite);
 		}
 		
 		map

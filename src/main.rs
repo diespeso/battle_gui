@@ -4,6 +4,7 @@ mod gui;
 mod tileset_parser;
 mod game;
 mod movable;
+mod animation;
 
 use ggez::mint::Point2;
 use ggez::{Context, GameResult, ContextBuilder};
@@ -14,11 +15,15 @@ use ggez::filesystem;
 use std::path::Path;
 use std::rc::Rc;
 use std::cell::RefCell;
+use std::borrow::Borrow;
+use core::time::Duration;
 
 use sprite::{Sprite};
 use gui::{Status, StatusCard};
 use game::Game;
 use movable::Movable;
+
+use animation::{*};
 
 use tileset_parser::{*};
 
@@ -33,11 +38,13 @@ fn main() {
     let path_skin = Path::new("/assets/skins.png");
     let skin = graphics::Image::new(&mut ctx, path_skin)
     	.expect("Couldnt load skin");
+   // let skin = Rc::new(RefCell::new(skin));
+   let skin = Sprite::new(skin);
     let portrait = graphics::Image::new(&mut ctx, path_portrait).expect("Couldn't load portrait");
     let mut sprite_portrait = Sprite::new(portrait.clone())
     	.with_cut(&mut ctx, [0.0, 0.0, 32.0, 32.0]);
-    let skin = Sprite::new(skin.clone());
-    let mut status_card = StatusCard::new(&mut ctx, skin)
+    
+    let mut status_card = StatusCard::new(&mut ctx, skin.clone())
     	.with_status(Status::new("diespeso1", 100))
     	.with_portrait(&mut ctx, sprite_portrait);
    //status_card.move_by([32.0, 536.0].into());
@@ -48,6 +55,15 @@ fn main() {
    		.expect("coulndt build tileset");
     game.sprites.push(tileset.sprites["integrity"].clone());
     game.set_tileset(tileset);
+    
+    let animatable = Rc::new(RefCell::new(skin.clone()));
+    
+    let mut animation = LinearAnimation::new(animatable.clone());
+    animation.add_command(
+    	Box::new(MoveCommand::new([1.0, 1.0].into()))
+    );
+    
+    animation.update(Duration::default());
     
     match event::run(&mut ctx, &mut event_loop,&mut game) {
     	Ok(_) => println!("Clean exit"),

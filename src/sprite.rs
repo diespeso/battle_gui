@@ -6,6 +6,8 @@ use ggez::mint::Point2;
 use super::utils;
 use super::movable::Movable;
 
+use super::animation::Animatable;
+
 #[derive(Debug, Clone)]
 pub struct Sprite {
 	image: Image,
@@ -73,4 +75,8 @@ impl Movable for Sprite {
 		self.params.dest = position;
 		r
 	}
+}
+
+impl Animatable for Sprite {
+	//dummy
 }

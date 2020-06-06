@@ -1,3 +1,5 @@
+use core::time::Duration;
+
 use ggez::{Context, GameResult};
 use ggez::event::{self, EventHandler};
 use ggez::graphics::{self, Drawable};

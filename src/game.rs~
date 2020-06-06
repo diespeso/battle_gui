@@ -1,3 +1,5 @@
+use core::time::Duration;
+
 use ggez::{Context, GameResult};
 use ggez::event::{self, EventHandler};
 use ggez::graphics::{self, Drawable};
@@ -5,6 +7,7 @@ use ggez::graphics::{self, Drawable};
 use super::gui::{Status, StatusCard};
 use super::tileset_parser::Tileset;
 use super::sprite::Sprite;
+use super::animation::AnimationEngine;
 
 
 pub struct Game {
@@ -41,6 +44,7 @@ impl EventHandler for Game {
 		//card.status.as_mut().expect("no status at all")
 		*card.get_status_mut().hp.borrow_mut() += 1;
 		println!("{:#?}", *card.get_status_mut().hp);
+		card.update();
 		Ok(())
 	}
 	

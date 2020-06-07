@@ -46,7 +46,6 @@ impl Status {
 	
 	pub fn set_hp(&mut self, num: i32) {
 		*self.hp.borrow_mut() = num;
-		println!("{:#?}", self.hp.borrow_mut());
 	}
 }
 
@@ -120,7 +119,7 @@ impl StatusCard {
 		/*let mut hp_texto = &self.hp_text.as_mut().expect("no status set").0;
 		hp_texto = &Text::new(self.get_status().hp.borrow().to_string());*/
 		self.hp_text.as_mut().expect("couldnt update gui").0 = Text::new(self.get_status().hp().borrow().to_string());
-		println!("uwu");
+		self.debug_position();
 	}
 }
 
@@ -182,6 +181,10 @@ impl Movable for StatusCard {
 	fn move_to(&mut self, position: Point2<f32>) ->
 	Point2<f32> {
 		unimplemented!();
+	}
+	
+	fn debug_position(&self) {
+		//println!("{:#?}", self.skin.borrow().params().dest);
 	}
 }
 

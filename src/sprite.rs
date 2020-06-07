@@ -51,6 +51,10 @@ impl Sprite {
 		&self.image
 	}
 	
+	pub fn params(&self) -> DrawParam {
+		self.params.clone()
+	}
+	
 	pub fn drawable(&self) -> impl Drawable {
 		self.image.clone()
 	}

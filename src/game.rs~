@@ -7,15 +7,19 @@ use ggez::{Context, GameResult};
 use ggez::event::{self, EventHandler};
 use ggez::graphics::{self, Drawable};
 
+use ggez::timer;
+
 use super::gui::{Status, StatusCard};
 use super::tileset_parser::Tileset;
 use super::sprite::Sprite;
+use super::animation::*;
 
 
 pub struct Game {
 	pub stat_card: Option<Rc<RefCell<StatusCard>>>,
 	pub tileset: Option<Tileset>,
 	pub sprites: Vec<Sprite>,
+	pub moves: Vec<TimedMove>,
 }
 
 impl Game {
@@ -25,6 +29,7 @@ impl Game {
 			stat_card: None,
 			tileset: None,
 			sprites: Vec::new(),
+			moves: Vec::new(),
 		}
 	}
 	
@@ -35,18 +40,26 @@ impl Game {
 	pub fn set_tileset(&mut self, tileset: Tileset) {
 		self.tileset = Some(tileset);
 	}
+	
+	
+	pub fn add_move(&mut self, _move: TimedMove) {
+		self.moves.push(_move);
+	}
 }
 
 impl EventHandler for Game {
 	fn update(&mut self, ctx: &mut Context) -> GameResult<()> {
 		let mut card = self.stat_card.as_mut()
-			.expect("no status card");
-		/* *(self.stat_card.as_ref().expect("no stat card").status.as_ref().expect("no stats in statcard").hp.borrow_mut()) += 1;
-		self.stat_card.expect("no stats card)*/
-		//card.status.as_mut().expect("no status at all")
-		*card.get_status_mut().hp.borrow_mut() += 1;
-		println!("{:#?}", *card.get_status_mut().hp);
-		card.update();
+			.expect("no status card");//borrow_mut();
+		*card.borrow_mut().get_status_mut().hp.borrow_mut() += 1;
+		//println!("ticks: {:#?}", timer::check_update_time(ctx, 30));
+		if timer::check_update_time(ctx, 60){ //10 fps
+			for _move in &mut self.moves {
+				_move.step(card.clone());
+			}
+		
+		}
+		card.borrow_mut().update();
 		Ok(())
 	}
 	
@@ -58,6 +71,7 @@ impl EventHandler for Game {
 		/*self.stat_card.as_ref().expect("status card not initialized").draw(ctx, Default::default());*/
 		self.stat_card.as_ref().expect("no status card set")
 			.borrow().draw(ctx, Default::default());
+		
 		
 		for sprite in &self.sprites {
 			sprite.draw(ctx);

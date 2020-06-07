@@ -50,7 +50,7 @@ fn main() {
     status_card.set_status(Status::new("diespeso1", 100));
     status_card.set_portrait(&mut ctx, sprite_portrait);
    //status_card.move_by([32.0, 536.0].into());
-   status_card.move_by([32.0, 376.0].into());
+   status_card.move_by([32.0, 536.0].into());
    let mut status_card = Rc::new(RefCell::new(status_card));
    
     game.set_status_card(status_card.clone());
@@ -60,33 +60,13 @@ fn main() {
     game.sprites.push(tileset.sprites["integrity"].clone());
     game.set_tileset(tileset);
     
+    let mv_cmd = TimedMove::new(MoveCommand::new([0.0, -128.0].into()), Duration::new(0.5, 0));
+    
+    game.add_move(mv_cmd);
+    
     let animatable = status_card.clone();
     
-    let mut animation = LinearAnimation::new(animatable.clone());
-    animation.add_command(
-    	Box::new(MoveCommand::new([1.0, 1.0].into()))
-    );
-    animation.add_command(
-    	Box::new(MoveCommand::new([1.0, 1.0].into()))
-    );animation.add_command(
-    	Box::new(MoveCommand::new([1.0, 1.0].into()))
-    );animation.add_command(
-    	Box::new(MoveCommand::new([1.0, 1.0].into()))
-    );animation.add_command(
-    	Box::new(MoveCommand::new([1.0, 1.0].into()))
-    );animation.add_command(
-    	Box::new(MoveCommand::new([1.0, 1.0].into()))
-    );animation.add_command(
-    	Box::new(MoveCommand::new([1.0, 1.0].into()))
-    );animation.add_command(
-    	Box::new(MoveCommand::new([1.0, 1.0].into()))
-    );animation.add_command(
-    	Box::new(MoveCommand::new([1.0, 1.0].into()))
-    );animation.add_command(
-    	Box::new(MoveCommand::new([1.0, 1.0].into()))
-    );
-    
-    animation.update(Duration::default());
+   
     
     match event::run(&mut ctx, &mut event_loop,&mut game) {
     	Ok(_) => println!("Clean exit"),

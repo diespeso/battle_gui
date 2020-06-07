@@ -8,8 +8,65 @@ use ggez::timer;
 use core::time::Duration;
 use ggez::Context;
 
+pub struct TimedMove {
+	command: MoveCommand,
+	duration: Duration,
+	step_command: MoveCommand,
+	delta: f64,
+	completion: f64,
+}
+
+impl TimedMove {
+	pub fn new(command: MoveCommand, duration: Duration)
+	-> Self {
+		let (mut x, mut y) = (command.vector.x.clone(), command.vector.y.clone());
+		//println!("{:#?}", duration.as_millis());
+		//x and y how will they change per second?
+		/*x = x / duration.as_millis() as f32;
+		y = y / duration.as_millis() as f32;*/
+		let delta = 1.0 / (60.0 * timer::duration_to_f64(duration.clone()));
+		x = x * delta as f32;
+		y = y * delta as f32;
+		
+		println!("{}", delta);
+		
+		//makes a subcommand that will step its magnitde per second
+		Self {
+			command: command,
+			duration: duration,
+			step_command: MoveCommand::new([x, y].into()),
+			delta: delta,
+			completion: 0.0,
+		}
+	}
+}
+
+impl<A> Command<A> for TimedMove where A: Animatable {
+	fn execute(&self, a: Rc<RefCell<A>>) {
+		self.command.execute(a);
+	}
+}
+
+impl<A> TimedCommand<A> for TimedMove where A: Animatable {
+	fn step(&mut self, a: Rc<RefCell<A>>) {
+		if self.completion >= (self.duration.as_secs() * 60) as f64  {
+			println!("finish");
+			return;			
+		} else {
+			println!("running");
+			self.step_command.execute(a);
+			self.completion += self.delta;
+		}		
+	}
+}
+
+pub trait TimedCommand<A>: Command<A> where A: Animatable {
+	fn step(&mut self, t: Rc<RefCell<A>>);
+}
+
 pub trait Command<T> where T: Animatable {
-	fn execute(&self, t: Rc<RefCell<T>>);
+	fn execute(&self, t: Rc<RefCell<T>>); //it may be better
+	//to use mut references
 }
 
 pub trait Animatable: Movable {

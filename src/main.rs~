@@ -59,13 +59,33 @@ fn main() {
    		.expect("coulndt build tileset");
     game.sprites.push(tileset.sprites["integrity"].clone());
     game.set_tileset(tileset);
+    /*
+    let mv_cmd = TimedMove::new(MoveCommand::new([0.0, -128.0].into()), Duration::from_millis(300));
     
-    let mv_cmd = TimedMove::new(MoveCommand::new([0.0, -128.0].into()), Duration::from_millis(500));
-    
-    game.add_move(mv_cmd);
+    game.add_move(Box::new(mv_cmd));
     
     let animatable = status_card.clone();
+    */
+    let mut animation = Animation::new(status_card.clone());
+    animation.add_animation(Box::new(
+    	TimedMove::new([0.0, -128.0].into(),
+    	 Duration::from_millis(300))
+    	 )
+    );
+    animation.add_animation(Box::new(
+    	TimedIdle::new(Duration::from_millis(1000))
+    	)
+    );
+    /*let mut other = Animation::new(status_card.clone());
+    other.add_animation(
+    	Box::new(
+    		TimedMove::new([-128.0, 0.0].into(),
+    		Duration::from_millis(500))
+    	)
+    );*/
     
+    game.add_animation(animation);
+   	//game.add_animation(other);
    
     
     match event::run(&mut ctx, &mut event_loop,&mut game) {

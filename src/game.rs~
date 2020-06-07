@@ -19,7 +19,7 @@ pub struct Game {
 	pub stat_card: Option<Rc<RefCell<StatusCard>>>,
 	pub tileset: Option<Tileset>,
 	pub sprites: Vec<Sprite>,
-	pub animations: Vec<Box<TimedMove>>,
+	pub animations: Vec<Animation>,
 }
 
 impl Game {
@@ -42,8 +42,8 @@ impl Game {
 	}
 	
 	
-	pub fn add_move(&mut self, cmd: Box<TimedMove>) {
-		self.animations.push(cmd);
+	pub fn add_move(&mut self, a: Animation) {
+		self.animations.push(a);
 	}
 }
 
@@ -54,9 +54,9 @@ impl EventHandler for Game {
 		*card.borrow_mut().get_status_mut().hp.borrow_mut() += 1;
 		//println!("ticks: {:#?}", timer::check_update_time(ctx, 30));
 		if timer::check_update_time(ctx, 60){ //10 fps
-			for cmd in &mut self.animations {
-				cmd.step(card.clone());
-			}
+		for animation in &mut self.animations {
+				animation.run();
+		}
 		
 		}
 		card.borrow_mut().update();

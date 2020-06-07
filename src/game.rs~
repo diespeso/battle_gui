@@ -19,7 +19,7 @@ pub struct Game {
 	pub stat_card: Option<Rc<RefCell<StatusCard>>>,
 	pub tileset: Option<Tileset>,
 	pub sprites: Vec<Sprite>,
-	pub animations: Vec<Box<TimedCommand<T: Animatable>>>,
+	pub animations: Vec<Box<TimedMove>>,
 }
 
 impl Game {
@@ -42,7 +42,7 @@ impl Game {
 	}
 	
 	
-	pub fn add_move(&mut self, cmd: Box<TimedCommand>) {
+	pub fn add_move(&mut self, cmd: Box<TimedMove>) {
 		self.animations.push(cmd);
 	}
 }

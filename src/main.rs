@@ -62,7 +62,7 @@ fn main() {
     
     let mv_cmd = TimedMove::new(MoveCommand::new([0.0, -128.0].into()), Duration::from_millis(500));
     
-    game.add_move(mv_cmd);
+    game.add_move(Box::new(mv_cmd));
     
     let animatable = status_card.clone();
     

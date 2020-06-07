@@ -14,7 +14,7 @@ pub trait TimedCommand<A>: Command<A> where A: Animatable {
 	fn step(&mut self, t: Rc<RefCell<A>>);
 }
 
-pub trait Command {
+pub trait Command<T> {
 	fn execute(&self, t: Rc<RefCell<T>>); //it may be better
 	//to use mut references
 }

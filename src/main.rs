@@ -60,7 +60,7 @@ fn main() {
     game.sprites.push(tileset.sprites["integrity"].clone());
     game.set_tileset(tileset);
     
-    let mv_cmd = TimedMove::new(MoveCommand::new([0.0, -128.0].into()), Duration::new(1, 0));
+    let mv_cmd = TimedMove::new(MoveCommand::new([0.0, -128.0].into()), Duration::from_millis(500));
     
     game.add_move(mv_cmd);
     

@@ -8,6 +8,53 @@ use ggez::timer;
 use core::time::Duration;
 use ggez::Context;
 
+pub static fps: u32 = 60;
+
+pub trait TimedCommand<A>: Command<A> where A: Animatable {
+	fn step(&mut self, t: Rc<RefCell<A>>);
+}
+
+pub trait Command {
+	fn execute(&self, t: Rc<RefCell<T>>); //it may be better
+	//to use mut references
+}
+
+pub trait Animatable: Movable {
+	
+}
+
+pub struct TimedIdle {
+	duration: Duration,
+	delta: f64,
+	completion: f64,
+}
+
+impl TimedIdle {
+	pub fn new(duration: Duration) -> Self {
+		Self {
+			duration: duration,
+			delta: 1.0 / ((fps as f64) * duration.as_secs_f64()),
+			completion: 0.0,
+		}
+	}	
+}
+
+impl<A> Command<A> for TimedIdle where A: Animatable {
+	fn execute(&self, t: Rc<RefCell<A>>) {
+		//do nothing
+	}
+}
+
+impl<A> TimedCommand<A> for TimedIdle where A: Animatable {
+	fn step(&mut self, t: Rc<RefCell<A>>) {
+		if self.completion >= 1.0  {
+			return;			
+		} else {
+			self.completion += self.delta;
+		}	
+	}
+}
+
 pub struct TimedMove {
 	command: MoveCommand,
 	duration: Duration,
@@ -24,12 +71,9 @@ impl TimedMove {
 		//x and y how will they change per second?
 		/*x = x / duration.as_millis() as f32;
 		y = y / duration.as_millis() as f32;*/
-		let delta = 1.0 / (60.0 * timer::duration_to_f64(duration.clone()));
+		let delta = 1.0 / ((fps as f64) * duration.as_secs_f64());
 		x = x * delta as f32;
-		y = y * delta as f32;
-		
-		println!("{}", delta);
-		
+		y = y * delta as f32;		
 		//makes a subcommand that will step its magnitde per second
 		Self {
 			command: command,
@@ -49,28 +93,13 @@ impl<A> Command<A> for TimedMove where A: Animatable {
 
 impl<A> TimedCommand<A> for TimedMove where A: Animatable {
 	fn step(&mut self, a: Rc<RefCell<A>>) {
-		if self.completion >= (self.duration.as_secs() * 60) as f64  {
-			println!("finish");
+		if self.completion >= 1.0  {
 			return;			
 		} else {
-			println!("running");
 			self.step_command.execute(a);
 			self.completion += self.delta;
 		}		
 	}
-}
-
-pub trait TimedCommand<A>: Command<A> where A: Animatable {
-	fn step(&mut self, t: Rc<RefCell<A>>);
-}
-
-pub trait Command<T> where T: Animatable {
-	fn execute(&self, t: Rc<RefCell<T>>); //it may be better
-	//to use mut references
-}
-
-pub trait Animatable: Movable {
-	
 }
 
 pub struct MoveCommand {

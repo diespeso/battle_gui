@@ -7,6 +7,8 @@ use ggez::graphics::{self, DrawParam, Rect, BlendMode,
 use ggez::error::GameResult;
 use ggez::Context;
 
+use ggez::mint::Vector2;
+
 use super::utils::{from_pixel_rect_to_frac, add_point2f};
 use super::movable::Movable;
 use super::animation::Animatable;
@@ -17,8 +19,8 @@ use ggez::mint::Point2;
 type MovableText = (Text, DrawParam);
 
 static name_offset: Point2<f32> = Point2::<f32>{
-	x: 10.0,
-	y: 8.0,
+	x: 32.0,
+	y: 10.0,
 };
 
 static hp_offset: Point2<f32> = Point2::<f32> {
@@ -51,6 +53,7 @@ impl Status {
 
 #[derive(Debug)]
 pub struct StatusCard {
+	pub param: DrawParam,
 	pub skin: Rc<RefCell<Sprite>>,
 	pub status: Option<Status>,
 	pub name_text: Option<MovableText>,
@@ -60,9 +63,10 @@ pub struct StatusCard {
 
 impl StatusCard {
 	pub fn new(ctx: &mut Context, skin: Rc<RefCell<Sprite>>) -> Self {
-		skin.clone().borrow_mut().set_cut(ctx, [0.0, 0.0, 160.0, 192.0]);
+		skin.clone().borrow_mut().set_cut(ctx, [0.0, 0.0, 128.0, 64.0]);
 		//default skin dimensions
 		Self {
+			param: DrawParam::default(),
 			skin: skin.clone(),
 			status: None,
 			name_text: None,
@@ -78,7 +82,7 @@ impl StatusCard {
 		self.hp_text = Some(Text::new(self.status.as_ref().unwrap().hp.borrow().to_string()));*/
 		self.name_text =  Some(
 			(Text::new(self.status.as_ref().unwrap().name),
-			DrawParam::default().dest(name_offset)
+			DrawParam::default().dest(name_offset).scale(Vector2::<f32>::from_slice(&[0.9, 0.8]))
 			)
 		);
 		//self.name_text.1 = self.name_text.1.dest([10.0, 8.0]);
@@ -93,8 +97,8 @@ impl StatusCard {
 	}
 	
 	pub fn set_portrait(&mut self, ctx: &mut Context, mut sprite: Sprite){
-		sprite.set_cut(ctx, [320.0, 0.0, 64.0, 64.0]);
-		sprite.set_position([96.0, 0.0]);
+		sprite.set_cut(ctx, [320.0, 0.0, 32.0, 32.0]);
+		sprite.set_position(self.param.dest.clone());
 		self.portrait = Some(sprite);
 	}
 	
@@ -132,7 +136,7 @@ impl graphics::Drawable for StatusCard {
 		let ref_hp = self.hp_text.as_ref().expect("no status set");
 		ref_hp.0.draw(ctx, ref_hp.1.clone())?;
 		graphics::queue_text(ctx, &ref_name.0,
-		Point2::<f32>::from_slice([0.0, 0.0]),
+		Point2::<f32>::from_slice(&[0.0, 0.0]),
 		None,
 		);
 		graphics::draw_queued_text(ctx, ref_name.1.clone(),

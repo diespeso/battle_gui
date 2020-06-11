@@ -61,7 +61,7 @@ fn main() {
     back_sprite.set_scale(Vector2::<f32>::from_slice(&[1.0, 1.0]));
     game.add_sprite(back_sprite);
     let path_portrait = Path::new("/assets/the_fool_melon.png");
-    let path_skin = Path::new("/assets/skins.png");
+    let path_skin = Path::new("/assets/battle_gui.png");
     let mut skin = graphics::Image::new(&mut ctx, path_skin)
     	.expect("Couldnt load skin");
    // skin.set_filter(graphics::FilterMode::Nearest);

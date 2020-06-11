@@ -128,9 +128,15 @@ impl graphics::Drawable for StatusCard {
 		//background
 		let p = param.clone(); //ignore param for now
 		let ref_name = self.name_text.as_ref().expect("no status set");
-		ref_name.0.draw(ctx, ref_name.1.clone())?;
+		//ref_name.0.draw(ctx, ref_name.1.clone())?;
 		let ref_hp = self.hp_text.as_ref().expect("no status set");
 		ref_hp.0.draw(ctx, ref_hp.1.clone())?;
+		graphics::queue_text(ctx, &ref_name.0,
+		Point2::<f32>::from_slice(&[0.0, 0.0]),
+		None,
+		);
+		graphics::draw_queued_text(ctx, ref_name.1.clone(),
+			Default::default(), graphics::FilterMode::Nearest);
 		self.portrait.as_ref().expect("no portrait set")
 			.draw(ctx);
 		self.skin.borrow().draw(ctx)?;

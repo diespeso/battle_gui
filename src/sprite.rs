@@ -1,7 +1,7 @@
 use ggez::graphics::{Image, DrawParam, Drawable};
 use ggez::graphics::Rect;
 use ggez::{Context, GameResult};
-use ggez::mint::Point2;
+use ggez::mint::{Point2, Vector2};
 
 use super::utils;
 use super::movable::Movable;
@@ -45,6 +45,10 @@ impl Sprite {
 	
 	pub fn dimensions(&self, ctx: &mut Context) -> Rect {
 		self.params.src.clone()
+	}
+	
+	pub fn set_scale(&mut self, scale: Vector2<f32>) {
+		self.params.scale = scale;
 	}
 	
 	pub fn image(&self) -> &Image {

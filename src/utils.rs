@@ -11,6 +11,10 @@ pub fn add_point2f(p1: Point2<f32>, p2: Point2<f32>) -> Point2::<f32> {
 	}
 }
 
+pub fn vector_2f(p1: f32, p2: f32) -> Point2<f32> {
+	Point2::<f32>{x: p1, y: p2}
+}
+
 pub fn sub_point2f(p1: Point2<f32>, p2: Point2<f32>) -> Point2::<f32> {
 	Point2::<f32> {
 		x: p1.x - p2.x,

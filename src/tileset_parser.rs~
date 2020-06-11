@@ -8,7 +8,7 @@ use std::io::BufReader;
 use std::path::Path;
 use std::convert::TryInto;
 use std::convert::From;
-use ggez::graphics::Image;
+use ggez::graphics::{self, Image, DrawParam};
 use super::sprite::Sprite;
 use ggez::filesystem;
 
@@ -45,7 +45,8 @@ impl Tileset {
 			parse_result.drain().collect();
 			
 		let mut tileset_conf = TilesetConfiguration::new();
-		let image = Image::new(ctx, &image_file).expect("couldn't load image");
+		let mut image = Image::new(ctx, &image_file).expect("couldn't load image");
+		image.set_filter(graphics::FilterMode::Nearest);
 		for r in result {
 			tileset_conf.add_from_data(
 				(r.0.clone(), TilesetData::from_data(r).1)
@@ -81,16 +82,32 @@ impl Tileset {
 				terr.position.y * SPRITE_SIZE,
 				terr.size.x * SPRITE_SIZE,
 				terr.size.y * SPRITE_SIZE]);
-			map.insert(name.to_string(), sprite.));
+			map.insert(name.to_string(), sprite);
 		}
 		
 		map
+	}
+	
+	pub fn get(&self, name: String) -> Sprite {
+		self.sprites[&name].clone()
+	}
+	
+	pub fn get_mut(&mut self, name: String) -> &mut Sprite {
+		self.sprites.get_mut(&name).expect("failed to get sprite from hashmap of tileset")
 	}
 	
 	pub fn draw(&self, ctx: &mut Context) {
 		for sprite in self.sprites.values() {
 			sprite.draw(ctx);
 		}
+	}
+	
+	pub fn into_relation_name_param(&self) -> HashMap<String, DrawParam> {
+		let mut result: HashMap<String, DrawParam> = HashMap::new();
+		for (name, sprite) in &self.sprites {
+			result.insert(name, sprite.params());
+		}
+		result
 	}
 }
 

@@ -14,12 +14,15 @@ use super::tileset_parser::Tileset;
 use super::sprite::Sprite;
 use super::animation::*;
 
+use crate::states::BattleGuiHandler;
+
 
 pub struct Game {
 	pub stat_card: Option<Rc<RefCell<StatusCard>>>,
 	pub tileset: Option<Tileset>,
 	pub sprites: Vec<Sprite>,
 	pub animations: Vec<Animation>,
+	pub battle_gui_handler: Option<BattleGuiHandler>,
 }
 
 impl Game {
@@ -30,7 +33,12 @@ impl Game {
 			tileset: None,
 			sprites: Vec::new(),
 			animations: Vec::new(),
+			battle_gui_handler: None,
 		}
+	}
+	
+	pub fn add_sprite(&mut self, sprite: Sprite) {
+		self.sprites.push(sprite);
 	}
 	
 	pub fn set_status_card(&mut self, stat_card: Rc<RefCell<StatusCard>>) {
@@ -41,9 +49,12 @@ impl Game {
 		self.tileset = Some(tileset);
 	}
 	
-	
 	pub fn add_animation(&mut self, a: Animation) {
 		self.animations.push(a);
+	}
+	
+	pub fn set_battle_gui_handler(&mut self, gui: BattleGuiHandler) {
+		self.battle_gui_handler = Some(gui);
 	}
 }
 
@@ -65,17 +76,20 @@ impl EventHandler for Game {
 	
 	fn draw(&mut self, ctx: &mut Context) -> GameResult<()> {
 		graphics::clear(ctx, graphics::Color::new(0.1, 0.1, 0.1, 1.0));
-		if let Some(tileset) = &self.tileset {
+		/*if let Some(tileset) = &self.tileset {
 			tileset.draw(ctx);
-		}
+		}*/
 		/*self.stat_card.as_ref().expect("status card not initialized").draw(ctx, Default::default());*/
+		
+		if let Some(handler) = &self.battle_gui_handler {
+			handler.draw(ctx);
+		}
+		/*for sprite in &self.sprites {
+			sprite.draw(ctx);
+		}*/
+		
 		self.stat_card.as_ref().expect("no status card set")
 			.borrow().draw(ctx, Default::default());
-		
-		
-		for sprite in &self.sprites {
-			sprite.draw(ctx);
-		}
 		graphics::present(ctx)
 	}
 }

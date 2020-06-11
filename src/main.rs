@@ -97,12 +97,13 @@ fn main() {
     	.borrow_mut().move_by(vector_2f(0.0, 40.0));
     
     let mut gui_animation = Animation::new(
-    	gui_handler.get_command("attack".to_string())
+    	RefCell::borrow(&gui_handler.get_command("attack".to_string()))
+    		.get_piece(TEXT_BOX.to_string())
     );
     //att_cmd.borrow_mut().move_by(vector_2f(32.0, 32.0));
     gui_animation.add_animation(Box::new(
     	TimedMove::new([-136.0, 0.0].into(),
-    	 Duration::from_millis(500))
+    	 Duration::from_millis(200))
     	 )
     );
     gui_animation.add_animation(Box::new(
@@ -112,7 +113,7 @@ fn main() {
     
     gui_animation.add_animation(Box::new(
     	TimedMove::new([136.0, 0.0].into(),
-    	Duration::from_millis(500))
+    	Duration::from_millis(200))
     ));
    	game.set_battle_gui_handler(gui_handler);
 

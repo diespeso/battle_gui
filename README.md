@@ -4,7 +4,7 @@ Battle GUI experiment on rust using ggez. Plase don't use this, is a mess
 # Branch for development of a basic animation system for transformation in sprites and clusters of sprites / drawables.
 Heres a test:
 
-![](https://github.com/diespeso/battle_gui/blob/old-state/animation_test.gif)
+![](https://github.com/diespeso/battle_gui/blob/old-state/test_animation.gif)
 
 What can be seen here is: a gui component called StatusCard being animated after implementing an empty
 Animatable trait on it, and also a Movable trait, which is the part that is animated.

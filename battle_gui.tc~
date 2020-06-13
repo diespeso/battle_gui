@@ -1,10 +1,15 @@
+ set object por_devil { 
+ position: 4 0 
+ size: 1 1 
+ } 
+ 
  set object plain_skin { 
  position: 0 0 
  size: 4 2 
  } 
  
  set object por_sword { 
- position: 2 0 
+ position: 2 2 
  size: 1 1 
  } 
  

@@ -79,6 +79,10 @@ pub trait Colorable {
     fn adjust_color(&mut self, adjustment: [f32; 4]) {
         panic!("no adjust_color method set");
     }
+
+    fn set_color(&mut self, color: Color) {
+        panic!("no set_color method set");
+    }
 }
 
 /// Timed transition between two colors.
@@ -100,7 +104,7 @@ impl TimedColor {
         let step = multiply_color_adjustment(adjustment, delta as f32);
 
         Self {
-            color: to_color.clone().into(),
+            color: from_color.clone().into(),
             duration: duration,
             step,
             delta,
@@ -111,6 +115,9 @@ impl TimedColor {
 
 impl TimedCommand for TimedColor {
     fn step(&mut self, a: &mut dyn Animatable) {
+        if self.completion == 0.0 {
+            a.set_color(self.color);
+        }
         if self.is_completed() {
             return;
         } else {

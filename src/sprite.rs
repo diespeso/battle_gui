@@ -62,10 +62,6 @@ impl Sprite {
     pub fn drawable(&self) -> impl Drawable {
         self.image.clone()
     }
-
-    pub fn set_color(&mut self, color: Color) {
-        self.params.color = color;
-    }
     
     
     pub fn draw(&self, ctx: &mut Context) -> GameResult {
@@ -90,6 +86,10 @@ impl Movable for Sprite {
 impl Colorable for Sprite {
     fn adjust_color(&mut self, adjustment: [f32; 4]) {
         self.params.color = utils::adjust_color(self.params.color, adjustment);
+    }
+
+    fn set_color(&mut self, color: Color) {
+        self.params.color = color;
     }
 }
 

@@ -197,6 +197,12 @@ impl Colorable for GuiCommandBanner {
             piece.borrow_mut().adjust_color(adjustment);
         }
     }
+
+    fn set_color(&mut self, color: Color) {
+        for piece in &mut self.pieces.values() {
+            piece.borrow_mut().set_color(color);
+        }
+    }
 }
 
 impl Movable for GuiCommandBanner {

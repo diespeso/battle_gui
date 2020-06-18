@@ -163,9 +163,9 @@ fn main() {
     );
 
     color_anim.add_animation(
-        Box::new(TimedColor::new(Color::from_rgba(255, 255, 255, 255),
+        Box::new(TimedColor::new(Color::from_rgba(105, 255, 255, 255),
         Color::from_rgba(176, 250, 5, 255), true,
-            Duration::from_millis(1000)))
+            Duration::from_millis(10000)))
     );
 
     game.set_battle_gui_handler(gui_handler);

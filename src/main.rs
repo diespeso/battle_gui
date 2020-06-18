@@ -10,7 +10,7 @@ mod states;
 use ggez::mint::{Point2, Vector2};
 use ggez::{Context, GameResult, ContextBuilder};
 use ggez::event::{self, EventHandler};
-use ggez::graphics::{self, Drawable, Font};
+use ggez::graphics::{self, Drawable, Font, Color};
 use ggez::filesystem;
 use ggez::conf::WindowMode;
 
@@ -158,6 +158,16 @@ fn main() {
     )        
     );
 
+    let mut color_anim = Animation::new(
+        Some(gui_handler.get_command("attack".to_string()))
+    );
+
+    color_anim.add_animation(
+        Box::new(TimedColor::new(Color::from_rgba(255, 255, 255, 255),
+        Color::from_rgba(176, 250, 5, 255), true,
+            Duration::from_millis(1000)))
+    );
+
     game.set_battle_gui_handler(gui_handler);
 
     /*
@@ -196,6 +206,7 @@ fn main() {
     //game.add_animation(animation);
     game.add_animation(gui_animation);
     game.add_animation(hide_animation);
+    game.add_animation(color_anim);
     //game.add_animation(other);
    
     

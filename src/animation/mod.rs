@@ -3,11 +3,14 @@ use std::cell::RefCell;
 use std::borrow::Borrow;
 use std::ops::Drop;
 
+use crate::utils::{*};
 use super::movable::Movable;
 use ggez::mint::Point2;
 use ggez::timer;
 use core::time::Duration;
 use ggez::Context;
+
+use ggez::graphics::Color;
 
 pub static FPS: f64 = 60.0;
 
@@ -63,8 +66,71 @@ pub trait Command {
     fn execute(&self, a: &mut dyn Animatable);
 }
 
-pub trait Animatable: Movable {
+pub trait Animatable: Movable + Colorable {
     
+}
+
+pub trait Colorable {
+    fn add_color(&mut self, color: Color) {
+        //dont use this one
+        panic!("no add color method declared for this type");
+    }
+
+    fn adjust_color(&mut self, adjustment: [f32; 4]) {
+        panic!("no adjust_color method set");
+    }
+}
+
+/// Timed transition between two colors.
+#[derive(Debug)]
+pub struct TimedColor {
+    color: Color,
+    duration: Duration,
+    step: [f32; 4],
+    delta: f64,
+    completion: f64,
+}
+
+impl TimedColor {
+    pub fn new(from_color: Color, to_color: Color, alpha: bool, duration: Duration) -> Self {
+        
+        let delta = 1.0 / (FPS * duration.as_secs_f64());
+        let adjustment = get_color_adjustment(from_color.clone(), to_color.clone());
+        println!("{:#?}", adjustment);
+        let step = multiply_color_adjustment(adjustment, delta as f32);
+
+        Self {
+            color: to_color.clone().into(),
+            duration: duration,
+            step,
+            delta,
+            completion: 0.0,
+        }
+    }
+}
+
+impl TimedCommand for TimedColor {
+    fn step(&mut self, a: &mut dyn Animatable) {
+        if self.is_completed() {
+            return;
+        } else {
+            a.adjust_color(self.step);
+            self.completion += self.delta;
+        }
+
+    }
+    
+    fn get_duration(&self) -> Duration {
+        self.duration.clone()
+    }
+    
+    fn get_completion(&self) -> f64 {
+        self.completion.clone()
+    }
+    
+    fn is_completed(&self) -> bool {
+        self.completion >= 1.0
+    }
 }
 
 pub struct TimedMove {

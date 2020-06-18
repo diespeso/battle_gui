@@ -73,7 +73,7 @@ impl EventHandler for Game {
     }
     
     fn draw(&mut self, ctx: &mut Context) -> GameResult<()> {
-        graphics::clear(ctx, graphics::Color::new(0.1, 0.1, 0.1, 1.0));
+        graphics::clear(ctx, graphics::Color::new(0.0, 0.0, 0.0, 1.0));
         
         if let Some(handler) = &self.battle_gui_handler {
             handler.draw(ctx);

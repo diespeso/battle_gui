@@ -18,7 +18,7 @@ use ggez::graphics::Scale;
 
 use ggez::Context;
 use ggez::graphics::{Drawable, Text, DrawParam, Image,
-    spritebatch::{SpriteBatch, SpriteIdx}};
+    spritebatch::{SpriteBatch, SpriteIdx}, Color};
 use ggez::mint::{Point2, Vector2};
 
 
@@ -188,6 +188,15 @@ impl GuiCommandBanner {
 
 impl Animatable for GuiCommandBanner {
 
+}
+
+
+impl Colorable for GuiCommandBanner {
+    fn adjust_color(&mut self, adjustment: [f32; 4]) {
+        for piece in &mut self.pieces.values() {
+            piece.borrow_mut().adjust_color(adjustment);
+        }
+    }
 }
 
 impl Movable for GuiCommandBanner {
@@ -360,6 +369,12 @@ impl Movable for StatusCard {
     
     fn debug_position(&self) {
         //println!("{:#?}", self.skin.borrow().params().dest);
+    }
+}
+
+impl Colorable for StatusCard {
+    fn adjust_color(&mut self, adjustment: [f32; 4]) {
+        self.skin.adjust_color(adjustment);
     }
 }
 

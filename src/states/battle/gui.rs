@@ -2,6 +2,7 @@ use core::time::Duration;
 use std::collections::HashMap;
 use std::rc::Rc;
 use std::cell::RefCell;
+use std::path::Path;
 
 use crate::tileset_parser::Tileset;
 use crate::utils::{*};
@@ -15,6 +16,7 @@ use crate::gui::{*};
 use ggez::graphics::{self, BlendMode, Rect, Font};
 use ggez::GameResult;
 use ggez::graphics::Scale;
+use ggez::filesystem;
 
 use ggez::Context;
 use ggez::graphics::{Drawable, Text, DrawParam, Image,
@@ -23,8 +25,8 @@ use ggez::mint::{Point2, Vector2};
 
 
 static name_offset: Point2<f32> = Point2::<f32>{
-    x: 32.0,
-    y: 10.0,
+    x: 57.0,
+    y: 0.0,
 };
 
 static hp_offset: Point2<f32> = Point2::<f32> {
@@ -35,10 +37,37 @@ static hp_offset: Point2<f32> = Point2::<f32> {
 type MovableText = (Text, DrawParam);
 
 #[derive(Debug)]
+pub struct BattleGUIData {
+    fonts: HashMap<String, Rc<RefCell<Font>>>,
+}
+
+impl BattleGUIData {
+    pub fn new(ctx: &mut Context) -> Self {
+        let mut result = Self {
+            fonts: HashMap::new(),
+        };
+        result.fonts.insert("racing".to_string(), 
+            Rc::new(
+                RefCell::new(
+                    Font::new(ctx, Path::new("/RacingSansOne-Regular.ttf"))
+            .expect("couldn't load font")
+                )));
+
+        result
+    }
+
+    pub fn get_font(&self, s: String) -> Rc<RefCell<Font>> {
+        self.fonts[&s].clone()
+    }
+}
+
+#[derive(Debug)]
 pub struct BattleGuiHandler {
     tileset: Tileset,
     commands: HashMap<String, Rc<RefCell<GuiCommandBanner>>>,
     allies_status: [Option<StatusCard>; 4],
+    battle_gui_data: BattleGUIData,
+    background: Image,
 }
 
 impl BattleGuiHandler {
@@ -46,7 +75,9 @@ impl BattleGuiHandler {
         let mut result = Self {
             tileset,
             commands: HashMap::new(),
-            allies_status: [None, None, None, None], 
+            allies_status: [None, None, None, None],
+            battle_gui_data: BattleGUIData::new(ctx),
+            background: Image::new(ctx, Path::new("/assets/background_test.png")).expect("no background could be loaded"),
         };
 
         result.test_initialize(ctx);
@@ -56,13 +87,50 @@ impl BattleGuiHandler {
     pub fn test_initialize(&mut self, ctx: &mut Context) {
         self.allies_status[0] = Some(
             StatusCard::from_tileset(ctx, Rc::new(
-                RefCell::new(Status::new("diespeso1", 100))
+                RefCell::new(Status::new("Nordmend", 100))
                 ), &self.tileset)
         );
+
+        self.allies_status[1] = Some(
+            StatusCard::from_tileset(ctx, Rc::new(
+                RefCell::new(Status::new("Drandurl", 100))
+                ), &self.tileset)
+        );
+
+        self.allies_status[2] = Some(
+            StatusCard::from_tileset(ctx, Rc::new(
+                RefCell::new(Status::new("Tsydysma", 100))
+                ), &self.tileset)
+        );
+
+        self.allies_status[3] = Some(
+            StatusCard::from_tileset(ctx, Rc::new(
+                RefCell::new(Status::new("Znoromah", 100))
+                ), &self.tileset)
+        );
+
         self.allies_status[0].as_mut().unwrap().set_portrait(ctx,
             self.tileset.get("por_devil".to_string()));
         self.allies_status[0].as_mut().unwrap()
-            .move_by(vector_2f(6.4, 256.0));
+            .move_by(vector_2f(6.4, 416.0));
+
+        self.allies_status[1].as_mut().unwrap().set_portrait(ctx,
+            self.tileset.get("por_devil".to_string()));
+        self.allies_status[1].as_mut().unwrap()
+            .move_by(vector_2f(164.0, 416.0));
+
+        self.allies_status[2].as_mut().unwrap().set_portrait(ctx,
+            self.tileset.get("por_devil".to_string()));
+        self.allies_status[2].as_mut().unwrap()
+            .move_by(vector_2f(322.0, 416.0));
+
+        self.allies_status[3].as_mut().unwrap().set_portrait(ctx,
+            self.tileset.get("por_devil".to_string()));
+        self.allies_status[3].as_mut().unwrap()
+            .move_by(vector_2f(482.0, 416.0));
+
+
+        self.decorate();
     }
     
     pub fn add_command_banner(&mut self, name: String) {
@@ -85,8 +153,23 @@ impl BattleGuiHandler {
             }
         }
     }
+
+    /// Gives decoration to the GUI Text, sets de fonts.
+    pub fn decorate(&mut self) {
+        for opt_status in &mut self.allies_status {
+            if let Some(status) = opt_status.as_mut() {
+                status.name_text.as_mut().unwrap().0.set_font(
+                    *self.battle_gui_data.get_font("racing".to_string()
+                    ).borrow(),
+                    //graphics::Scale::uniform(18.0)
+                    graphics::Scale{x: 18.0, y: 24.0}
+                );
+            }
+        }
+    }
     
     pub fn draw(&self, ctx: &mut Context) {
+        graphics::draw(ctx, &self.background, DrawParam::default());
         for command in self.commands.values() {
             command.borrow().draw(ctx);
         }
@@ -226,6 +309,7 @@ pub struct StatusCard {
     pub hp_text: Option<MovableText>,
     pub portrait: Option<Sprite>,
     pub font: Option<Rc<RefCell<Font>>>,
+    pub components: HashMap<String, Sprite>,
 }
 
 impl StatusCard {
@@ -233,7 +317,7 @@ impl StatusCard {
         skin.set_cut(ctx, [0.0, 0.0, 128.0, 64.0]);
         //default skin dimensions
         //BROKEN: DONT USE FIXME
-        Self {
+        let mut result = Self {
             param: DrawParam::default(),
             skin: skin,
             status,
@@ -241,7 +325,10 @@ impl StatusCard {
             hp_text: None,
             portrait: None,
             font: None,
-        }
+            components: HashMap::new(),
+        };
+
+        result
     }
 
     pub fn from_tileset(ctx: &mut Context, status: Rc<RefCell<Status>>, tileset: &Tileset) -> Self {
@@ -255,7 +342,13 @@ impl StatusCard {
             hp_text: None,
             portrait: None,
             font: None,
+            components: HashMap::new(),
         };
+
+        result.components.insert("background_mask".to_string(),
+            tileset.get("background_mask".to_string()));
+        result.components.insert("background_color".to_string(),
+            tileset.get("background_color".to_string()));
         //uses the same status cause the logic is in set
         //im kinda lazy
         result.set_status(status.clone());
@@ -268,16 +361,6 @@ impl StatusCard {
     
     pub fn set_status(&mut self, status: Rc<RefCell<Status>>) {
         self.status = status;
-        /*self.name_text =  Some(
-            (Text::new(self.status.as_ref().unwrap().name),
-            DrawParam::default().dest(name_offset)
-            )
-        );
-        self.hp_text = Some(
-            (Text::new(self.status.as_ref().unwrap().hp.borrow().to_string()),
-            DrawParam::default().dest(hp_offset)
-            )
-        );*/
 
         self.name_text = Some(
             (Text::new((*RefCell::borrow(&self.status)).name),
@@ -300,7 +383,7 @@ impl StatusCard {
     }
     
     pub fn set_portrait(&mut self, ctx: &mut Context, mut sprite: Sprite){
-        sprite.set_cut(ctx, [320.0, 0.0, 32.0, 32.0]);
+       // sprite.set_cut(ctx, [320.0, 0.0, 32.0, 32.0]);
         sprite.set_position(self.param.dest.clone());
         self.portrait = Some(sprite);
     }
@@ -325,6 +408,9 @@ impl StatusCard {
 impl graphics::Drawable for StatusCard {
     fn draw(&self, ctx: &mut Context, param: DrawParam) -> GameResult<()> {
         //background
+        self.components.get("background_color").unwrap().draw(ctx);
+        self.components.get("background_mask").unwrap().draw(ctx);
+        
         let p = param.clone(); //ignore param for now
         let ref_name = self.name_text.as_ref().expect("no status set");
         //ref_name.0.draw(ctx, ref_name.1.clone())?;
@@ -338,6 +424,7 @@ impl graphics::Drawable for StatusCard {
             Default::default(), graphics::FilterMode::Nearest);
         self.portrait.as_ref().expect("no portrait set")
             .draw(ctx);
+
         self.skin.draw(ctx)?;
         Ok(())
     }
@@ -357,6 +444,10 @@ impl graphics::Drawable for StatusCard {
 
 impl Movable for StatusCard {
     fn move_by(&mut self, vector: Point2<f32>) {
+
+        for component in self.components.values_mut() {
+            component.move_by(vector.clone());
+        }
         self.skin.move_by(vector.clone());
         let mut name = self.name_text.as_mut().expect("no status");
         name.1 = name.1.dest(add_point2f(name.1.dest.clone(), 

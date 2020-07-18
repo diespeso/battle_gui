@@ -39,8 +39,10 @@ fn main() {
    /* let (mut ctx, mut event_loop) = ContextBuilder::new("game", "diespeso").build().expect("contexto no iniciado"); */
    let mut ctx = ContextBuilder::new("game", "diespeso")
     .window_mode(WindowMode {
-        width: 512.0,
-        height: 320.0,
+      /*  width: 512.0,
+        height: 320.0,*/
+        width: 640.0,
+        height: 480.0,
         maximized: false,
         fullscreen_type: ggez::conf::FullscreenType::Windowed,
         borderless: false,
@@ -74,7 +76,7 @@ fn main() {
     
         sprite_portrait.set_cut(&mut ctx, [0.0, 0.0, 32.0, 32.0]);
     
-    let font = Font::new(&mut ctx, Path::new("/dogicapixel.ttf"))
+    let font = Font::new(&mut ctx, Path::new("/RacingSansOne-Regular.ttf"))
         .expect("couldn't load font");
     let font = Rc::new(RefCell::new(font));
     /*let mut status_card = StatusCard::new(&mut ctx, skin_rc.clone());

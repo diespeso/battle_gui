@@ -8,14 +8,114 @@
  size: 5 3 
  } 
 
+ set object background_color { 
+ position: 0 0 
+ size: 0 0 
+ } 
+
  set object background_mask { 
  position: 0 3 
  size: 5 3 
  } 
 
- set object background_color { 
- position: 5 0 
+ set object background_no_signal { 
+ position: 0 6 
  size: 5 3 
+ } 
+
+ set object background_clean { 
+ position: 0 9 
+ size: 5 3 
+ } 
+
+ set object background_spiky { 
+ position: 0 12 
+ size: 5 3 
+ } 
+
+ set object background_crispy { 
+ position: 0 15 
+ size: 5 3 
+ } 
+
+ set object background_fluent { 
+ position: 5 7 
+ size: 5 3 
+ } 
+
+ set object background_charged { 
+ position: 5 10 
+ size: 5 3 
+ } 
+
+ set object background_ancient { 
+ position: 5 13 
+ size: 5 3 
+ } 
+
+ set object background_dubious { 
+ position: 5 16 
+ size: 5 3 
+ } 
+
+ set object background_horrid { 
+ position: 10 10 
+ size: 5 3 
+ } 
+
+ set object light { 
+ position: 0 0 
+ size: 0 0 
+ } 
+
+ set object shadow_mask { 
+ position: 15 16 
+ size: 5 2 
+ } 
+
+ set object light_no_signal { 
+ position: 10 13 
+ size: 2 1 
+ } 
+
+ set object light_clean { 
+ position: 10 15 
+ size: 2 1 
+ }
+
+ set object light_spiky { 
+ position: 10 17 
+ size: 2 1 
+ } 
+
+ set object light_crispy { 
+ position: 15 4 
+ size: 2 1 
+ } 
+
+ set object light_fluent { 
+ position: 15 6 
+ size: 2 1 
+ } 
+
+ set object light_charged { 
+ position: 15 8 
+ size: 2 1 
+ } 
+
+ set object light_ancient { 
+ position: 15 10 
+ size: 2 1 
+ } 
+
+ set object light_dubious { 
+ position: 15 12 
+ size: 2 1 
+ } 
+
+ set object light_horrid { 
+ position: 15 14 
+ size: 2 1 
  } 
  
  set object por_sword { 

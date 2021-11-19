@@ -126,7 +126,7 @@ impl BattleGuiHandler {
             self.tileset.get("background_crispy")
         );
         self.allies_status[1].as_mut().unwrap()
-            .move_by(vector_2f(128.0, 416.0));
+            .move_by(vector_2f(129.0, 416.0));
 
 
         self.allies_status[2].as_mut().unwrap().set_portrait(ctx,
@@ -136,7 +136,7 @@ impl BattleGuiHandler {
             self.tileset.get("background_charged")
         );
         self.allies_status[2].as_mut().unwrap()
-            .move_by(vector_2f(256.0, 416.0));
+            .move_by(vector_2f(258.0, 416.0));
 
         self.allies_status[3].as_mut().unwrap().set_portrait(ctx,
             self.tileset.get("por_devil"));
@@ -145,7 +145,7 @@ impl BattleGuiHandler {
             self.tileset.get("background_horrid")
         );
         self.allies_status[3].as_mut().unwrap()
-            .move_by(vector_2f(384.0, 416.0));
+            .move_by(vector_2f(387.0, 416.0));
 
 
         self.decorate();

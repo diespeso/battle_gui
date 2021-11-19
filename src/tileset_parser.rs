@@ -88,8 +88,8 @@ impl Tileset {
 		map
 	}
 	
-	pub fn get(&self, name: String) -> Sprite {
-		self.sprites[&name].clone()
+	pub fn get(&self, name: &'static str) -> Sprite {
+		self.sprites[name].clone()
 	}
 	
 	pub fn get_mut(&mut self, name: String) -> &mut Sprite {
